@@ -11,8 +11,15 @@ jobs:
         with:
           root_file: main.tex
           latexmk_use_xelatex: true
+      - name: Rename PDF with commit hash
+        shell: bash
+        run: |
+          SHORT_SHA="${GITHUB_SHA::7}"
+          mv main.pdf "${SHORT_SHA}.pdf"
+          echo "ARTIFACT_NAME=${SHORT_SHA}" >> "${GITHUB_ENV}"
+          echo "PDF_NAME=${SHORT_SHA}.pdf" >> "${GITHUB_ENV}"
       - name: Upload PDF file
         uses: actions/upload-artifact@v6
         with:
-          name: PDF
-          path: main.pdf
+          name: ${{ env.ARTIFACT_NAME }}
+          path: ${{ env.PDF_NAME }}
