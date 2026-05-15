@@ -1,0 +1,4 @@
+\section{PagedAttention Kernel Compatibility}
+\label{app:kernel}
+
+Our head-specific admission policy results in a ragged KV cache structure where sequence lengths vary significantly across heads. To perform attention operations over this irregular structure efficiently, we employ vLLM's PagedAttention \cite{pagedattn} kernel, which supports variable sequence lengths across the batch dimension. We leverage this by reshaping our attention input: we fold the head dimension ($H$) into the batch dimension ($B$), treating the workload as $B \times H$ independent sequences of varying lengths. This allows us to apply industry-standard CUDA kernels to compute attention over the ragged KV cache seamlessly.

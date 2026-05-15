@@ -1,0 +1,76 @@
+\section{Background and Motivation}
+
+\subsection{Long-context attention bottleneck}
+
+The core of the Transformer architecture \cite{attn} in LLMs is the attention mechanism. Given a sequence of input tokens, the attention output for a query vector $q_t \in \mathbb{R}^d$ at step $t$ is computed by attending to past key-value pairs $\{(k_i, v_i)\}_{i=1}^{t}$. Specifically, let $K_{\leq t},V_{\leq t} \in \mathbb{R}^{t \times d}$ denote the matrices formed by stacking the key and value vectors up to step $t$. The attention operation is defined as:
+\begin{myEquation}
+    \operatorname{Attn}(q_t, K_{\leq t}, V_{\leq t}) = \operatorname{Softmax}\left(q_t K_{\leq t}^\top/\sqrt{d}\right) V_{\leq t}
+\end{myEquation}
+
+In standard autoregressive generation, recomputing $K_{\leq t}$ and $V_{\leq t}$ from all previous tokens at every step would be computationally prohibitive. To address this, inference engines employ a \textbf{KV cache}, storing the key and value vectors for previous tokens. At each step $t$, the system only computes the new pair $(k_t, v_t)$, appends it to the cache, and performs attention over the accumulated state. However, as the sequence length increases, the attention mechanism presents distinct bottlenecks during the two phases of inference: \textit{prefilling} and \textit{decoding}.
+
+\textit{During prefilling}, the model processes the sequence of length $N$ in parallel, with the quadratic complexity of attention $O(N^2)$ quickly dominates execution time (\cref{fig:breakdown}a). \textit{During decoding}, the model generates tokens autoregressively, making the process memory-bound as it necessitates loading the KV cache from memory at every step. As the sequence grows, the massive data transfer saturates memory bandwidth, driving up latency (\cref{fig:breakdown}b), while the expanding cache occupies significant GPU memory (\cref{fig:breakdown}c).
+
+\myFig{breakdown}{t}{1}
+
+\subsection{A causal framework for KV management}
+\label{subsec:framework}
+
+Formally, we can model the KV cache $\mathcal{C}_t$ for a certain attention head at time step $t$ as a set of KV pairs stored in memory. In standard LLM inference, the cache management policy is trivial: it is an append-only operation where every new token's state $(k_t, v_t)$ is indiscriminately admitted throughout the entire inference process:
+\begin{myEquation}
+    \mathcal{C}_t^{\text{std}} = \mathcal{C}_{t-1}^{\text{std}} \cup \{(k_t, v_t)\}
+\end{myEquation}
+
+This policy leads to linear KV cache growth $|\mathcal{C}_t^{\text{std}}| = t$ and becomes the root cause of attention bottleneck. To address this, prior works have introduced constraints on the attention operation or $\mathcal{C}_t$ itself. We unify these approaches under a causal framework based on the \textit{timing} and \textit{decision scope} of the operation, as illustrated in \cref{fig:primitives} and detailed below.
+
+\paragraph{KV Selection (read-time).}
+Selection methods, such as Quest \cite{quest} and NSA \cite{nsa}, optimize the \textit{read} path. They \textit{approximate} the attention operation by selecting a subset of keys $\mathcal{S}_t \subset \mathcal{C}_t$ relevant to the current query $q_t$:
+\begin{myEquation}
+  \operatorname{Attn}(q_t, \mathcal{C}_t) \approx \operatorname{Attn}(q_t, \mathcal{S}_t),\; \text{where } \mathcal{S}_t = \operatorname{Select}(q_t, \mathcal{C}_t)
+\end{myEquation}
+
+While Selection reduces the number of attended tokens per step, the underlying cache $\mathcal{C}_t$ remains fully populated to support future queries, leaving the linear KV cache growth unresolved.
+
+\paragraph{KV Eviction (post-write).}
+Eviction methods, such as SnapKV \cite{snapkv} and R-KV \cite{rkv}, impose a constraint $B$ on the cache size. These methods operate \textit{retrospectively}: they first admit the new token into the cache, and then prune the set based on \textit{past statistics}:
+\begin{myEquation}
+    \mathcal{C}_t^{\text{new}} = \operatorname{Evict}(\mathcal{C}_t^{\text{old}}) \quad \text{s.t.} \quad |\mathcal{C}_t^{\text{new}}| \leq B
+\end{myEquation}
+
+Eviction effectively bounds KV memory usage. However, it suffers from a ``write-then-throw'' inefficiency: the system temporarily admits noise into the KV cache, forcing subsequent queries to waste memory bandwidth and computation attending to these tokens until they are eventually identified as redundant. Furthermore, eviction can be risky; information discarded is permanently lost, potentially degrading generation quality if the evicted tokens are needed for later context \cite{infinigen}.
+
+\paragraph{KV Admission (pre-write).}
+We identify \textit{Admission} as the missing third primitive. Unlike Eviction, which reacts to cache overflow, Admission acts as a gatekeeper. It evaluates the \textit{future utility} of a new state $(k_t, v_t)$ \textit{before} it is committed to $\mathcal{C}_t$:
+\begin{myEquation}
+    \mathcal{C}_t = \operatorname{Admit}(\mathcal{C}_{t-1}, k_t, v_t)
+\end{myEquation}
+
+Ideally, an Admission policy prevents the persistence of noise tokens, ensuring $\mathcal{C}_t$ holds only critical information. This avoids the cost of accumulating redundant states, reducing KV growth and alleviating subsequent attention bottlenecks.
+
+\paragraph{A unified view.}
+
+As illustrated in \cref{fig:primitives}, these primitives are not mutually exclusive; rather, they operate at different stages of the token lifecycle. An ideal inference system can employ Admission to \textit{filter} the input stream, Selection to \textit{focus} the attention computation, and Eviction to \textit{prune} obsolete history. Together, they form a comprehensive framework that addresses the inefficiencies of long-context LLM inference across the entire token lifecycle. We provide a more comprehensive survey of existing literature in Appendix~\ref{app:related}.
+
+\subsection{Sparsity and locality in attention patterns}
+\label{subsec:sparsity}
+
+To design an effective KV Admission policy, we must first understand the characteristics of attention patterns. We employ Llama-3.1-8B \cite{llama3} to perform a long-context code summarization task from The Stack dataset \cite{thestack} to observe \textit{which} tokens are attended to and \textit{when}. We identify three key properties:
+
+\myFig{distribution}{t}{1}
+
+\paragraph{Skewed utility distribution.}
+Attention scores are not uniformly distributed; they exhibit pronounced sparsity where a small subset of tokens attracts the majority of attention. As shown in \cref{fig:distribution}a, specific tokens (e.g., Token 383 in Layer 10, Head 19) act as high-utility tokens, consistently receiving high attention from subsequent queries. In contrast, other tokens (e.g., Token 1185 in the same head) are virtually ignored. This suggests that a large portion of the KV cache stores ``noise'' that contributes negligible value to future representations.
+
+\paragraph{Head-specific relevance.}
+The utility of a token is not intrinsic to the token itself but is dependent on the attention head. A token that is critical for one head may be irrelevant for another. For instance, comparing the two heads in \cref{fig:distribution}b, we observe that while Token 1185 serves as a primary attention target for Layer 22, Head 6, it is almost completely ignored by Layer 10, Head 19. Conversely, Token 383, which was ignored by the former, becomes highly salient for the latter. This implies that a unified admission policy (e.g., dropping a token from all heads simultaneously) is suboptimal. An effective Admission mechanism must be fine-grained, making independent decisions for each head.
+
+\paragraph{The necessity of local context.} While long-range attention is sparse, local attention exhibits strong recency bias. As illustrated in \cref{fig:distribution}c, Token 383 in Layer 22, Head 6 exemplifies a phenomenon of ``transient utility.'' Although this token eventually receives near-zero attention from distant queries, it attracts significant attention from its immediate successors. This creates a dilemma for any admission policy: a token cannot be immediately dismissed as globally irrelevant, as it is temporarily high-utility. A hybrid mechanism is therefore needed to preserve recent tokens briefly for local dense attention before switching to utility-based admission for long-range context.
+
+\subsection{Systems challenges with ragged KV states}
+\label{subsec:ragged}
+
+\myFig{fragmentation}{b}{0.93}
+
+Implementing a fine-grained admission policy introduces non-trivial systems challenges. In standard dense attention, the KV cache for a sequence is represented as a contiguous tensor. However, independent admission decisions by each head, as motivated in \cref{subsec:sparsity}, result in a cache that is ``ragged'' across two dimensions: \textit{(1) Across heads:} Different heads prioritize different tokens, leading to uneven cache lengths within the same layer. \textit{(2) Across layers:} The level of semantic abstraction varies by depth, causing sparsity rates to diverge between shallow and deep layers.
+
+A naive implementation that simply concentrates admitted tokens leads to severe memory fragmentation, as shown in \cref{fig:fragmentation}. Pre-allocating maximum-length buffers negates the memory savings, while dynamic reallocation incurs prohibitive runtime overhead. To translate theoretical sparsity into practical wall-clock speedup and memory reduction, the system must leverage a decoupled logical-physical memory mapping to manage these irregular, head-specific cache efficiently.

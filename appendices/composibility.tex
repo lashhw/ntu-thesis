@@ -1,0 +1,20 @@
+\section{Synergy with Selection and Eviction}
+\label{app:synergy}
+
+As conceptualized in \cref{subsec:framework}, the three KV management primitives operate at distinct stages of the token lifecycle and are inherently complementary. In this section, we demonstrate that WG-KV can be seamlessly integrated with both read-time KV Selection and post-write KV Eviction methods to achieve compound gains.
+
+\subsection{Synergy with KV Selection} 
+
+We investigate the interplay between WG-KV\footnote{In this evaluation, WG-KV operates with $\lambda = 0.16$, admitting $\approx20\%$ KVs.} and Quest, a representative KV Selection method. During decoding, Quest selects relevant KVs by utilizing key landmarks\footnote{For Quest, ``key landmarks'' refer to the per-page minimum and maximum key vectors.} to estimate the criticality of each KV page. When evaluated at a selection budget of 2048 KVs per query, WG-KV effectively pre-filters redundant tokens, reducing KV memory usage (\cref{fig:quest}a). This compacted cache then shrinks the candidate pool for selection, decreasing memory access per decode step (\cref{fig:quest}b), which further translates into lower attention latency (\cref{fig:quest}c).
+
+Notably, these compound efficiency gains do not come at the expense of model capability. \cref{fig:quest}d presents the average scores across HELMET tasks, demonstrating that integrating WG-KV achieves nearly identical accuracy to standalone Quest. This indicates that performing selection on a cache already compressed by WG-KV does not sacrifice representation fidelity. \cref{fig:integration_new} further supports these findings by showing that this robustness is consistently maintained across varying selection budgets, highlighting the composable nature of pre-write admission and read-time selection.
+
+\subsection{Synergy with KV Eviction} 
+
+\myFig{evict}{t}{0.65}
+
+\cref{fig:evict} provides a conceptual illustration of the synergy between KV Admission and Eviction. Without Admission, the rapid accumulation of KV states leads to steep cache growth, causing the system to frequently hit the eviction threshold and trigger aggressive evictions (\cref{fig:evict}a). By filtering redundant tokens pre-write, Admission flattens the growth, delaying the onset of eviction and reducing its frequency (\cref{fig:evict}b). The smaller shaded area under this flattened curve also translates to a lower cumulative attention cost over the generation process.
+
+We empirically validate this synergy by coupling WG-KV with SnapKV, a representative KV Eviction method, in reasoning-intensive scenarios where long thinking traces rapidly consume KV cache memory. We evaluate this on the AIME25 benchmark \cite{aime25} under strict memory bounds. As illustrated in \cref{fig:snapkv_short}, relying solely on SnapKV (Eviction) leads to catastrophic degradation (26.7\% accuracy); this occurs because the ``write-then-throw'' inefficiency allows noise to flood the cache, triggering frequent evictions that inadvertently discard critical context. Conversely, relying solely on WG-KV (Admission) to satisfy strict memory limits forces the policy to be overly aggressive, causing the model to reject potentially useful information and ``starve'' itself. However, combining these primitives yields a superior trade-off. WG-KV acts as a gatekeeper that filters noise at the source, effectively reducing the frequency of eviction triggers and allowing the eviction policy to focus on pruning \textit{obsolete} history. This synergy stabilizes the reasoning process and restores accuracy to 80.0\%, matching the performance of the unbounded KV baseline while strictly adhering to memory limits. Detailed experimental setup and analysis are provided in Appendix~\ref{app:evict}.
+
+\myFig{snapkv_short}{t}{0.8}

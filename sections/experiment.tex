@@ -1,0 +1,43 @@
+\section{Experiments}
+
+\myFig{benchmark}{t}{1}
+
+In this section, we evaluate WG-KV across (1) the sparsity-accuracy tradeoff and (2) practical system efficiency, followed by (3) a qualitative analysis of its admission patterns and additional analyses.
+
+\subsection{Experimental setup}
+
+\paragraph{Model and training.} We implement WG-KV on top of Llama-3.1-8B \cite{llama3} and Qwen3-4B-2507 \cite{qwen3}. We freeze the backbone model and train only the lightweight Write-Gate MLP. Training is performed on a subset of FineWeb-Edu \cite{fineweb} with the objective of minimizing  $\mathcal{L}_{\text{total}}$. Detailed training configurations are provided in Appendix~\ref{app:training}.
+
+\paragraph{Evaluation scope.} We analyze the results on Llama-3.1-8B in this section. To demonstrate the generalizability of WG-KV across different model architectures, we provide additional evaluation results on Qwen3-4B-2507 in Appendix~\ref{app:qwen}.
+
+\subsection{Sparsity-accuracy tradeoff}
+\label{sec:tradeoff}
+
+\paragraph{Benchmarks.} To evaluate the robustness of our learnable admission policy, we utilize HELMET \cite{helmet}, a comprehensive benchmark for long-context understanding. Our evaluation covers 14 tasks, spanning five distinct categories: \textit{Retrieval Augmented Generation}, \textit{Passage Reranking}, \textit{Long-Document QA}, \textit{Summarization}, and \textit{Many-Shot In-Context Learning}. Detailed benchmark descriptions are provided in Appendix~\ref{app:benchmark}.
+
+\paragraph{Baselines.} We compare against three representative baselines which we re-contextualize as static (input-agnostic) or training-free admission policies. This setup ensures a fair comparison where all baselines can leverage the system-level efficiency gains of KV Admission as described in \cref{sec:implementation}. We evaluate \textbf{Local Attention}, which employs a uniform static policy retaining only recent and initial sink tokens \cite{streamingllm}; \textbf{DuoAttention} \cite{duoattn}, a head-wise static policy that designates specific heads as retrieval or streaming heads based on pre-computed profiles; and \textbf{AdaEA++}, a training-free admission policy adapted from Expected Attention \cite{expectedattn} and AdaKV \cite{adakv}. Detailed baseline descriptions are provided in Appendix~\ref{app:baseline}.
+
+\paragraph{Setup.} We investigate the efficacy of different admission policies in preserving task accuracy under varying levels of KV sparsity. For WG-KV, we fix the binarization threshold $\tau=0.1$ while sweeping $\lambda$ to control the admission budget and achieve different sparsity targets. For baselines, we vary the sliding window size (Local Attention), the ratio of retrieval heads (DuoAttention), or the score threshold (AdaEA++). \cref{fig:benchmark} shows the results.
+
+\paragraph{Results.} WG-KV consistently outperforms all baselines, particularly in high-sparsity regimes (admitting $<$40\% KVs). Notably, in information-intensive tasks such as \textit{Passage Reranking} (MS MACRO) and \textit{Summarization} (InfiniteBench Sum and Multi-LexSum), WG-KV maintains near-lossless task accuracy even when operating at 90\% sparsity (admitting only 10\% KVs). In contrast, Local Attention degrades rapidly as the admission budget tightens; DuoAttention and AdaEA++, while more robust, lack the adaptability to achieve parity with WG-KV. Their reliance on static head profiles or training-free attention statistics prevents them from capturing complex context dependencies, leading to significant accuracy drops under strict admission budgets.
+
+\subsection{System efficiency}
+\label{sec:system_performance}
+
+\myFig{perf}{b}{1}
+
+\paragraph{Setup.} To validate the practical system efficiency of WG-KV under realistic workloads, we measure the end-to-end latency and memory usage using input sequences sampled from the PG-19 \cite{pg19} long-document dataset. We evaluate the model equipped with WG-KV at $\lambda = 0.16$, which achieves approximately 80\% sparsity (i.e., admitting 20\% KVs), and compare it against the full-attention baseline (see Appendix~\ref{app:system} for detailed experimental setup). \cref{fig:perf} shows the results.
+
+\paragraph{Results.} WG-KV delivers substantial speedups. In the \textit{prefill} phase, it achieves \textbf{2.56--3.85x} speedup across varying sequence lengths. This gain is primarily attributed to the vertical-slash sparse attention mechanism, which avoids the quadratic complexity of full attention. In the \textit{decode} phase, it achieves \textbf{1.61--2.63x} speedup. This gain is driven by the reduced KV cache size, which alleviates memory transfer overhead and consequently lowers attention latency. This compact KV cache also translates to a \textbf{36--60\%} reduction in the overall memory usage.
+
+\paragraph{Overhead analysis.} The introduction of the Write-Gate MLP incurs minimal overhead. In terms of model size, the additional parameters constitute only $\approx$0.4\% of the total parameter count in both Llama and Qwen models. In terms of computation, as indicated by the non-attention latency (blue bars) in \cref{fig:perf}a-b, the introduced latency overhead is negligible. The massive reduction in attention computation and memory transfer overhead far outweighs the marginal cost of the MLP.
+
+\subsection{Qualitative analysis of admission patterns}
+
+To explore the internal mechanics of WG-KV, we visualize the admission decisions across different attention heads in \cref{fig:interpret_short}, using an excerpt from \citet{medtner} as the input text. Remarkably, without any explicit rules, WG-KV autonomously learns highly specialized, head-specific memory allocation strategies. We observe a clear division of labor: certain heads act as structural and syntactic anchors by predominantly admitting function words (\cref{fig:interpret_short}a), punctuation marks (\cref{fig:interpret_short}b), or newline characters (\cref{fig:interpret_short}d). Conversely, other heads selectively persist information-dense tokens such as proper nouns (\cref{fig:interpret_short}c) and numerical values (\cref{fig:interpret_short}e). Some heads exhibit complex, non-trivial admission behaviors (\cref{fig:interpret_short}f-g) that defy simple lexical categorization, possibly tracking high-level semantic dependencies. This emergent specialization demonstrates WG-KV's capability to intelligently compose a compact yet comprehensive global cache. Full visualizations are provided in Appendix~\ref{app:interpret}.
+
+\subsection{Additional analyses}
+
+To further investigate WG-KV's characteristics, we provide additional analyses. (1) Appendix~\ref{app:synergy} explores the synergy between WG-KV and Selection/Eviction methods. (2) Appendix~\ref{app:hyperparam} presents a hyperparameter analysis detailing the impact of $\lambda$ and $\tau$ on the sparsity-loss tradeoff. (3) Appendix~\ref{app:local} provides an ablation study that validates the necessity of the local cache. (4) Appendix~\ref{app:dynamic} demonstrates WG-KV's input-dependent admission patterns and its adaptive memory allocation based on task-specific semantic structures.
+
+\myFig{interpret_short}{t!}{0.95}

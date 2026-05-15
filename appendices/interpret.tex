@@ -1,0 +1,24 @@
+\section{Full Visualizations of Admission Patterns}
+\label{app:interpret}
+
+In this section, we provide the full visualizations of admission patterns on Llama-3.1-8B equipped with WG-KV at $\lambda=0.16$. 
+
+\cref{fig:interpret_summary} shows the aggregated admission decisions across all attention heads. The color intensity corresponds to the proportion of heads that admit a given token into their global cache. We observe a strong cross-head consensus for specific token categories: special control tokens (e.g., \texttt{<|begin\_of\_text|>}, \texttt{<|start\_header\_id|>}), key entities, proper nouns, and semantically dense words are highly admitted. Conversely, function words and pronouns are rarely admitted. 
+
+\crefrange{fig:l0h7}{fig:l18h6} present the full-text admission patterns corresponding to the cropped snippets shown in \cref{fig:interpret_short}a--g. These visualizations further demonstrate the fine-grained division of labor among individual attention heads, ranging from lexical and structural anchors to those capturing complex semantic dependencies.
+
+\myFig{interpret_summary}{t}{0.95}
+
+\myFig{l0h7}{t}{0.95}
+
+\myFig{l4h7}{t}{0.95}
+
+\myFig{l24h0}{t}{0.95}
+
+\myFig{l27h2}{t}{0.95}
+
+\myFig{l28h7}{t}{0.95}
+
+\myFig{l13h1}{t}{0.95}
+
+\myFig{l18h6}{t}{0.95}

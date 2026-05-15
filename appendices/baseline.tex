@@ -1,0 +1,12 @@
+\section{Additional Details for Admission Baselines}
+\label{app:baseline}
+
+We compare our method against static (input-agnostic) or training-free admission baselines. The specific configurations for each baseline are detailed below.
+
+\paragraph{Local Attention.} A uniform static admission policy that only admits the most recent tokens while retaining a small set of initial tokens \cite{streamingllm} to serve as attention sinks.
+
+\paragraph{DuoAttention \cite{duoattn}.} A head-wise static policy that categorizes attention heads into retrieval heads (which retain the full KV cache) and streaming heads (which retain the local sliding window and initial attention sinks). We utilize the official profiles provided by the authors for the Llama-3.1-8B model. For Qwen3-4B-2507, as no official profile is available, we apply a similar optimization-based identification method described in the paper to determine the head allocation.
+
+\paragraph{AdaEA++.} Expected Attention (EA, \citealp{expectedattn}) and AdaKV \cite{adakv} are originally designed as post-write KV Eviction methods. To fairly benchmark them under our KV Admission framework, we adapt them into AdaEA++, a pre-write training-free admission policy. Using the same FineWeb-Edu subset utilized for training WG-KV (Appendix~\ref{app:training}), we first precompute the mean and covariance of queries for each head offline. We then apply EA's closed-form scoring on these samples and adopt AdaKV's head-wise allocation strategy to find the top-$k$ score thresholds for a target admission budget.  During inference, AdaEA++ calculates the expected attention score for each newly generated KV pair using the precomputed query statistics. If the score surpasses the threshold, the token is admitted. This adaptation allows AdaEA++ to function as a strong training-free admission baseline that is fully compatible with our efficient system implementation (\cref{sec:implementation}).
+
+\myParagraphWithoutTitle To ensure a fair comparison, we standardize the cache retention configurations across all baselines. Specifically, we fix the attention sink size to 128 for Local Attention and DuoAttention, and set the local sliding window size to 256 for DuoAttention and AdaKV++ to align with WG-KV. 

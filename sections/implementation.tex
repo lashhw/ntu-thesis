@@ -1,0 +1,32 @@
+\section{System Implementation}
+\label{sec:implementation}
+
+Implementing WG-KV presents a unique systems challenge: unlike standard Transformers where the KV cache grows uniformly across all heads, our admission policy results in a \textit{ragged cache structure} with highly irregular sequence lengths across heads (as discussed in \cref{subsec:ragged}). To translate theoretical sparsity into wall-clock speedup, we present a \textbf{hardware-aware implementation} that leverages paged memory management to handle this irregular cache growth efficiently.
+
+\myFig{management}{t}{1}
+
+\subsection{Dual-cache paged memory management}
+\label{subsec:dual}
+
+To address memory fragmentation caused by head-specific admission, we decouple the \textit{logical view} of the cache from its \textit{physical storage}. We partition the logical KV cache of each attention head into the \textbf{local cache} and \textbf{global cache} (\cref{fig:management}a), backed by a unified physical \textbf{KV pool} (\cref{fig:management}b). To bridge these views, we maintain a per-head \textbf{page table} (\cref{fig:management}c) that maps the logical pages to non-contiguous physical pages (16 tokens per page). This allows the global cache to grow dynamically without requiring contiguous reallocation.
+
+\subsection{Efficient prefilling via sparse attention}
+\label{subsec:prefill}
+
+In the prefill phase, the system processes the entire input sequence in parallel. The goal is to compute attention and populate the KV cache efficiently.
+
+\paragraph{Vertical-slash sparse attention.}
+To accelerate attention computation, we leverage the sparsity pattern dictated by score $g$. Following the Write-Gated Attention formulation, the attention mask $M$ exhibits a ``vertical-slash'' pattern (\cref{fig:overview}b): every token attends to \textit{globally} high-utility tokens (``vertical'') and its \textit{local} neighborhood (``slash''). Formally, for query $i$, key $j$, $M_{ij}$ is defined as:
+\begin{myEquation}
+    M_{ij} = \big(\mathbb{1}(i - j < W_{local}) \lor \mathbb{1}(g_j \ge \tau)\big) \land \mathbb{1}(i \geq j)
+\end{myEquation}
+
+We utilize the sparse FlashAttention kernel from MInference \cite{minference} to compute attention efficiently. This avoids the cost of dense $O(N^2)$ attention by skipping masked-out regions.
+
+\paragraph{Initial cache population.} Concurrently with attention computation, we write KV states to memory. Tokens within the final $W_{\text{local}}$ window are written to the local cache. Tokens preceding this window are written to the global cache only if their $g \ge \tau$; otherwise, they are discarded immediately.
+
+\subsection{Efficient decoding via lazy promotion}
+
+In the decode phase, tokens are generated autoregressively. Modern serving engines, such as vLLM \cite{pagedattn} and SGLang \cite{sglang}, rely on paged-KV systems to maximize throughput, but assume uniform cache size across all heads. To maintain compatibility with this industry-standard infrastructure while managing the ragged KV cache growth, we employ a \textbf{lazy promotion} strategy. This mechanism enforces a local window size $W_{\text{local}}$ via a ring buffer while selectively persisting high-utility states.
+
+As illustrated in \cref{fig:management}d, the update mechanism operates per-head: Upon generating a new token $(k_t, v_t)$ with score $g_t$, the system (1) inspects the ``victim'' token at the current \textbf{local pointer}. If the victim's stored score satisfies $g \ge \tau$, it is (2) promoted to the global cache, advancing the \textbf{global pointer}. The new token then (3) overwrites the victim in the local cache, and the local pointer is incremented modulo $W_{\text{local}}$. To efficiently compute attention over the resulting ragged cache, we fold the head dimension into the batch dimension to leverage variable-length PagedAttention kernel, with details provided in Appendix~\ref{app:kernel}.

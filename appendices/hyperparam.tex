@@ -1,0 +1,10 @@
+\section{Hyperparameter Analysis}
+\label{app:hyperparam}
+
+We provide a detailed analysis of the impact of the training-time hyperparameter $\lambda$ and the inference-time binarization threshold $\tau$. \cref{fig:threshold} plots the distillation loss computed on a held-out validation set of FineWeb-Edu samples against the normalized KV cache size. By sweeping $\lambda$ and $\tau$, we trace the Pareto frontier of the model's efficiency. Increasing $\lambda$ effectively drives the model towards higher sparsity (admitting less KVs), albeit with an increase in distillation loss. Empirically, we observe that fixing $\tau \approx 0.1$ consistently yields near-optimal operating points along this frontier across various $\lambda$ settings. Based on this observation, we adopt $\tau=0.1$ for all of our experiments.
+
+\myFig{threshold}{t}{0.8}
+
+\myFig{threshold_cmp}{t}{0.8}
+
+\myFig{gate}{t}{1}

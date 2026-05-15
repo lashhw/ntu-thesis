@@ -1,0 +1,48 @@
+\section{Details of Eviction Synergy for Long-Chain Reasoning}
+\label{app:evict}
+
+This section explores the interplay between KV Admission and Eviction, particularly in reasoning-intensive scenarios where intermediate ``thinking tokens'' cause rapid cache expansion. While WG-KV effectively filters low-utility tokens at the source (pre-write admission), real-world hardware imposes strict limits on memory capacity. This constraint is particularly pronounced in modern high-throughput serving systems \cite{pagedattn,sglang}, where multiple concurrent requests compete for a shared memory pool. Consequently, sustaining inference over indefinitely long sequences requires enforcing a hard budget to prevent memory exhaustion, which inevitably necessitates removing obsolete history (post-write eviction). We argue that these primitives are complementary: combining pre-write admission with post-write eviction ensures that the limited budget is reserved exclusively for critical context. Our results demonstrate that this joint approach yields a superior memory-accuracy trade-off compared to either strategy in isolation.
+
+This section serves as the empirical validation of the conceptual framework illustrated in \cref{fig:evict}. As hypothesized, without Admission, the rapid accumulation of noise leads to a steep memory growth curve, causing the system to frequently hit the memory ceiling and trigger aggressive evictions. By introducing WG-KV to filter noise pre-write, we effectively flatten cache growth. This not only delays the initial onset of eviction but, as our experiments below demonstrate, significantly reduces the frequency of eviction triggers. This confirms that KV Admission mitigates the ``write-then-throw'' inefficiency, preventing the cache from being polluted by noise that would otherwise force the premature eviction of critical context.
+
+\subsection{Eviction policy implementation}
+
+To evaluate the synergy between KV Admission and Eviction, we integrate WG-KV with a representative eviction baseline. We employ a SnapKV-like eviction policy \cite{snapkv} to manage the cache under strict memory constraints by enforcing a hard global KV cache budget such that the average capacity per head is 4096 tokens. When the cache size exceeds this budget, an eviction process is triggered to remove the bottom 10\% of KV pairs with the lowest importance scores.
+
+The eviction policy operates independently for each KV head. Consider a specific head with cached keys $K \in \mathbb{R}^{N \times d}$ and a corresponding set of query heads $\mathcal{G}$ (as in Grouped-Query Attention). We define the importance score $S_j$ for the $j$-th key-value pair based on queries from the most recent window of size $W_{\text{obs}}=256$, denoted as $\{Q_{\text{obs}}^{(h)} \in \mathbb{R}^{W_{\text{obs}} \times d} \mid h \in \mathcal{G}\}$. The scoring process proceeds in three steps:
+\begin{enumerate}
+    \item \textbf{Attention computation:} We first compute the post-softmax attention scores $A^{(h)} \in \mathbb{R}^{W_{\text{obs}} \times N}$ for each query head $h \in \mathcal{G}$ against the keys $K$:
+    \begin{myEquation}
+    A^{(h)} = \operatorname{Softmax}\left(Q_{\text{obs}}^{(h)} K^\top/\sqrt{d}\right)
+    \end{myEquation}
+    \item \textbf{Score aggregation:} To capture the utility of a key across the observation window, we aggregate the scores by maximizing over the query heads in $\mathcal{G}$ and summing over $W_{\text{obs}}$:
+    \begin{myEquation}
+        S^{\text{raw}}_j = \sum_{i=1}^{W_{\text{obs}}} \max_{h \in \mathcal{G}} A_{i,j}^{(h)}
+    \end{myEquation}
+    \item \textbf{Local smoothing:} Finally, we apply a max-pooling operation with a kernel size of $W_{\text{pool}}=5$ over the sequence length $N$:
+    \begin{myEquation}
+        S = \operatorname{MaxPool}\left(S^{\text{raw}},W_{\text{pool}}\right)
+    \end{myEquation}
+\end{enumerate}
+
+\subsection{Quantitative analysis}
+
+We evaluate the impact of WG-KV (pre-write admission) on the AIME25 benchmark using the reasoning variant of Qwen3-4B-2507. We analyze the system's behavior in two distinct scenarios: (a) an unbounded memory setting to isolate the behavior of WG-KV, and (b) a bounded memory setting to analyze its synergy with SnapKV (post-write eviction).
+
+\myFig{snapkv}{t}{0.7}
+
+\paragraph{Admission alone is insufficient under strict bounds.}
+\cref{fig:snapkv}a illustrates the trade-off when no size limit is enforced on the KV cache. Increasing $\lambda$ reduces the KV cache size but progressively degrades accuracy.
+In the bounded setting (\cref{fig:snapkv}b), relying solely on Admission to avoid hitting the memory limit necessitates an overly aggressive policy. For instance, with $\lambda=1.28$, the Admission rate is low enough that the eviction trigger count drops to zero (the cache never fills up). However, this comes at a steep cost: accuracy drops to 66.7\%. This indicates that when using Admission alone, the model is forced to reject tokens that are useful, starving itself of information to satisfy the memory constraint.
+
+\paragraph{Eviction alone leads to catastrophic degradation.}
+Conversely, relying solely on Eviction (the ``Off'' baseline in \cref{fig:snapkv}b) results in a catastrophic accuracy drop. Without WG-KV, the cache grows rapidly with noise tokens, triggering frequent evictions that inadvertently discard critical information. Consequently, accuracy collapses to 26.7\%.
+
+\paragraph{Optimal performance requires combining Admission and Eviction.}
+The synergy between the two primitives achieves the best of both worlds. By setting a moderate sparsity penalty ($\lambda=0.32$), WG-KV prevents low-utility tokens from being persisted into the KV cache. This filtering process allows the eviction policy to focus on its primary strength: identifying and removing \textit{obsolete} information that has outlived its usefulness. As shown in \cref{fig:snapkv}b, pairing WG-KV with SnapKV allows the model to achieve 80\% accuracy under strict memory constraints---matching the performance of the original model with unbounded memory as shown in \cref{fig:snapkv}a (``Off''). This result confirms that Admission and Eviction are not mutually exclusive but complementary strategies essential for memory-constrained long-chain reasoning.
+
+\subsection{Qualitative analysis}
+
+To qualitatively illustrate the synergy between KV Admission and Eviction, \cref{fig:evict_interpret} visualizes the token lifecycle during an AIME25 reasoning trace. The visualization reveals an intriguing phenomenon: fundamental semantic anchors, such as the initial problem statement (\cref{fig:evict_interpret}a), critical sub-conclusions (\cref{fig:evict_interpret}c), and the final definitive answer validation (\cref{fig:evict_interpret}e), are admitted and persistently retained to guide the global reasoning trajectory and formulate the final response. Conversely, intermediate exploratory hypotheses and trial calculations (\cref{fig:evict_interpret}b and \cref{fig:evict_interpret}d) are initially admitted by WG-KV to support immediate derivation steps, but as the model reaches intermediate milestones and transitions to subsequent logical phases, these temporary ``scratchpad'' states are retrospectively identified as \textit{obsolete} and pruned by SnapKV. This demonstrates how the joint policy effectively distills convoluted thinking traces into a compact cache without sacrificing the information needed for accurate problem-solving.
+
+\myFig{evict_interpret}{t}{0.95}

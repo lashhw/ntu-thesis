@@ -1,0 +1,11 @@
+\begin{abstract}
+
+長上下文大型語言模型的推論效能，受到二次方複雜度的注意力機制以及呈線性增長的鍵值（Key-Value）快取所限制 。先前的方法透過事後選擇或驅逐來緩解這個問題，但卻忽略了導致低效的根本原因：不加選擇的詞元准入。在本文中，我們將鍵值管理形式化為一個由三個基元組成的因果系統：鍵值准入（Admission）、選擇（Selection） 與驅逐 （Eviction）。我們透過寫入閘控鍵值（Write-Gated KV，簡稱 WG-KV）來實作鍵值准入，這是一種輕量級機制，能夠學習在詞元進入快取之前預測其效用。藉由及早過濾掉低效用的狀態，以維持緊湊的全域快取並搭配滑動的區域快取，我們的方法顯著降低了記憶體使用量，並同時加速了預填（prefill）和解碼（decode）階段 。我們的結果證明，「學習該寫入什麼」是實現高效長上下文推論的具原則性且實用的方法 。
+
+\end{abstract}
+
+\begin{abstract*}
+
+Long-context LLM inference is bottlenecked by the quadratic attention complexity and linear Key-Value (KV) cache growth. Prior approaches mitigate this via post-hoc selection or eviction but overlook the root inefficiency: \textit{indiscriminate token admission}. In this paper, we formalize KV management as a causal system of three primitives: KV Admission, Selection, and Eviction. We instantiate KV Admission via Write-Gated KV (WG-KV), a lightweight mechanism that learns to predict token utility \textit{before} cache entry. By filtering out low-utility states early to maintain a compact global cache alongside a sliding local cache, WG-KV significantly reduces memory usage and accelerates both prefill and decode phases. Our results demonstrate that \textit{learning what to write} is a principled and practical recipe for efficient long-context inference.
+
+\end{abstract*}

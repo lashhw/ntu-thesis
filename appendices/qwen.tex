@@ -1,0 +1,12 @@
+\section{Evaluation Results on Qwen Model}
+\label{app:qwen}
+
+To demonstrate the generalizability of WG-KV across different model architectures, we perform additional evaluations on the non-reasoning variant of Qwen3-4B-2507.
+
+\subsection{Sparsity-accuracy tradeoff}
+
+\cref{fig:benchmark_qwen} shows the evaluation results on the HELMET benchmark. Similar to the observations on Llama-3.1-8B (\cref{fig:benchmark}), WG-KV maintains high accuracy on Qwen3-4B-2507 across varying admission budgets, consistently outperforming baselines across diverse tasks.
+
+\subsection{System efficiency}
+
+Following the same experimental setup used for Llama-3.1-8B, we measure the end-to-end latency and memory usage on Qwen3-4B-2507 using the trained Write-Gate MLP at $\lambda=0.32$, which achieves approximately 80\% sparsity (i.e., admitting 20\% KVs). As shown in \cref{fig:perf_qwen}, WG-KV achieves significant efficiency gains. Specifically, we observe \textbf{3.23--4.17x} speedup in prefill latency and \textbf{1.59--2.50x} speedup in decode latency across varying sequence lengths. Furthermore, WG-KV reduces memory usage by \textbf{53--69\%} compared to the full attention baseline.

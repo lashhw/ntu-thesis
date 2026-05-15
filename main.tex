@@ -1,0 +1,81 @@
+% !TEX TS-program = xelatex
+% !BIB program = bibtex
+% !TEX encoding = UTF-8 Unicode
+
+\documentclass[
+  twoside,
+  openright,
+  degree    = master,               % degree = master | doctor
+  language  = english,              % language = chinese | english
+  fontset   = template,             % fontset = default | template | system | overleaf
+  watermark = false,                 % watermark = true | false
+  doi       = false,                 % doi = true | false
+]{ntuthesis}
+
+\input{ntusetup}
+
+\begin{document}
+
+% 封面與口試審定
+% Cover and Verification Letter
+\makecover                          % 論文封面（Cover）
+% \makeverification                   % 口試委員審定書（Verification Letter）
+
+% 致謝與論文摘要
+% Acknowledgement and Abstract
+\pagenumbering{roman}             % 若您隱藏口委審定書 請解開此註解 頁碼會從致謝開始(羅馬數字)
+\input{front/acknowledgement}       % 致謝（Acknowledgement）
+\input{front/abstract}              % 摘要（Abstract）
+
+% 生成目錄與符號列表
+% Contents of Tables and Denotation
+\maketableofcontents                % 目錄（Table of Contents）
+\makelistoffigures                  % 圖目錄（List of Figures）
+\makelistoftables                   % 表目錄（List of Tables）
+% \input{front/denotation}            % 符號列表（Denotation）
+
+% 論文內容
+% Contents of Thesis
+\mainmatter
+
+\let\NTUchapter\chapter
+\let\NTUsection\section
+
+\RenewDocumentCommand{\section}{s m}{\NTUchapter{#2}}
+\let\subsection\NTUsection
+
+\input{sections/introduction}
+\input{sections/background}
+\input{sections/method}
+\input{sections/implementation}
+\input{sections/experiment}
+\input{sections/conclusion}
+
+% 參考文獻
+% References
+\refmatter
+\bibliographystyle{acl_natbib}
+\bibliography{includes/references}
+
+% 附錄
+% Appendices
+\appendix
+\addtocontents{toc}{\protect\NTUappendixtrue}
+
+\input{sections/limitations}
+\input{sections/ethical}
+\input{appendices/related}
+\input{appendices/kernel}
+\input{appendices/training}
+\input{appendices/benchmark}
+\input{appendices/baseline}
+\input{appendices/system}
+\input{appendices/qwen}
+\input{appendices/composibility}
+\input{appendices/evict}
+\input{appendices/hyperparam}
+\input{appendices/local}
+\input{appendices/dynamic}
+\input{appendices/interpret}
+
+\end{document}

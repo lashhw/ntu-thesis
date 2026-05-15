@@ -1,0 +1,1483 @@
+// [inproceedings]
+
+@inproceedings{helix,
+author = {Mei, Yixuan and Zhuang, Yonghao and Miao, Xupeng and Yang, Juncheng and Jia, Zhihao and Vinayak, Rashmi},
+title = {Helix: Serving Large Language Models over Heterogeneous {GPU}s and Network via Max-Flow},
+year = {2025},
+isbn = {9798400706981},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3669940.3707215},
+doi = {10.1145/3669940.3707215},
+abstract = {This paper introduces Helix, a distributed system for high-throughput, low-latency large language model (LLM) serving in heterogeneous GPU clusters. The key idea behind Helix is to formulate inference computation of LLMs over heterogeneous GPUs and network connections as a max-flow problem on directed, weighted graphs, whose nodes represent GPU instances and edges capture both GPU and network heterogeneity through their capacities. Helix then uses a mixed integer linear programming (MILP) algorithm to discover highly optimized strategies to serve LLMs on heterogeneous GPUs. This approach allows Helix to jointly optimize model placement and request scheduling, two highly entangled tasks in heterogeneous LLM serving. Our evaluation on several heterogeneous clusters ranging from 24 to 42 GPU nodes shows that Helix improves serving throughput by up to 3.3x and reduces prompting and decoding latency by up to 66\% and 24\%, respectively, compared to existing approaches. Helix is available at https://github.com/Thesys-lab/Helix-ASPLOS25.},
+booktitle = {Proceedings of the 30th ACM International Conference on Architectural Support for Programming Languages and Operating Systems, Volume 1},
+pages = {586–602},
+numpages = {17},
+keywords = {cloud computing, distributed systems, large language model serving, system for ml},
+location = {Rotterdam, Netherlands},
+series = {ASPLOS '25}
+}
+
+@inproceedings{specinfer,
+author = {Miao, Xupeng and Oliaro, Gabriele and Zhang, Zhihao and Cheng, Xinhao and Wang, Zeyu and Zhang, Zhengxin and Wong, Rae Ying Yee and Zhu, Alan and Yang, Lijie and Shi, Xiaoxiang and Shi, Chunan and Chen, Zhuoming and Arfeen, Daiyaan and Abhyankar, Reyna and Jia, Zhihao},
+title = {Spec{I}nfer: Accelerating Large Language Model Serving with Tree-based Speculative Inference and Verification},
+year = {2024},
+isbn = {9798400703867},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3620666.3651335},
+doi = {10.1145/3620666.3651335},
+abstract = {This paper introduces SpecInfer, a system that accelerates generative large language model (LLM) serving with tree-based speculative inference and verification. The key idea behind SpecInfer is leveraging small speculative models to predict the LLM's outputs; the predictions are organized as a token tree, whose nodes each represent a candidate token sequence. The correctness of all candidate token sequences represented by a token tree is verified against the LLM in parallel using a novel tree-based parallel decoding mechanism. SpecInfer uses an LLM as a token tree verifier instead of an incremental decoder, which significantly reduces the end-to-end latency and computational requirement for serving generative LLMs while provably preserving model quality. Our evaluation shows that SpecInfer outperforms existing LLM serving systems by 1.5-2.8\texttimes{} for distributed LLM inference and by 2.6-3.5\texttimes{} for offloading-based LLM inference, while preserving the same generative performance. SpecInfer is publicly available at https://github.com/flexflow/FlexFlow/},
+booktitle = {Proceedings of the 29th ACM International Conference on Architectural Support for Programming Languages and Operating Systems, Volume 3},
+pages = {932–949},
+numpages = {18},
+keywords = {large language model serving, speculative decoding, token tree verification},
+location = {La Jolla, CA, USA},
+series = {ASPLOS '24}
+}
+
+@inproceedings{
+kvflow,
+title={{KVF}low: Efficient Prefix Caching for Accelerating {LLM}-Based Multi-Agent Workflows},
+author={Zaifeng Pan and AJJKUMAR PATEL and Yipeng Shen and Zhengding Hu and Yue Guan and Wan-Lu Li and Lianhui Qin and Yida Wang and Yufei Ding},
+booktitle={The Thirty-ninth Annual Conference on Neural Information Processing Systems},
+year={2025},
+url={https://openreview.net/forum?id=5Iw1nDtYmT}
+}
+
+@inproceedings{
+worfbench,
+title={Benchmarking Agentic Workflow Generation},
+author={Shuofei Qiao and Runnan Fang and Zhisong Qiu and Xiaobin Wang and Ningyu Zhang and Yong Jiang and Pengjun Xie and Fei Huang and Huajun Chen},
+booktitle={The Thirteenth International Conference on Learning Representations},
+year={2025},
+url={https://openreview.net/forum?id=vunPXOFmoi}
+}
+
+@inproceedings{multichallenge,
+    title = "{M}ulti{C}hallenge: A Realistic Multi-Turn Conversation Evaluation Benchmark Challenging to Frontier {LLM}s",
+    author = "Deshpande, Kaustubh  and
+      Sirdeshmukh, Ved  and
+      Mols, Johannes Baptist  and
+      Jin, Lifeng  and
+      Hernandez-Cardona, Ed-Yeremai  and
+      Lee, Dean  and
+      Kritz, Jeremy  and
+      Primack, Willow E.  and
+      Yue, Summer  and
+      Xing, Chen",
+    editor = "Che, Wanxiang  and
+      Nabende, Joyce  and
+      Shutova, Ekaterina  and
+      Pilehvar, Mohammad Taher",
+    booktitle = "Findings of the Association for Computational Linguistics: ACL 2025",
+    month = jul,
+    year = "2025",
+    address = "Vienna, Austria",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2025.findings-acl.958/",
+    doi = "10.18653/v1/2025.findings-acl.958",
+    pages = "18632--18702",
+    ISBN = "979-8-89176-256-5",
+    abstract = "We present MultiChallenge, a pioneering benchmark evaluating large language models (LLMs) on conducting multi-turn conversations with human users, a crucial yet underexamined capability for their applications. MultiChallenge identifies four categories of challenges in multi-turn conversations that are not only common and realistic among current human-LLM interactions, but are also challenging to all current frontier LLMs. All 4 challenges require accurate instruction-following, context allocation, and in-context reasoning at the same time.We also develop LLM as judge with instance-level rubrics to facilitate an automatic evaluation method with fair agreement with experienced human raters. Despite achieving near perfect scores on existing multi-turn evaluation benchmarks, all frontier models have less than 50{\%} accuracy on MultiChallenge, with the top-performing Claude 3.5 Sonnet (October 2024) achieving just a 41.4{\%} average accuracy."
+}
+
+@inproceedings{
+oneruler,
+title={One ruler to measure them all: Benchmarking multilingual long-context language models},
+author={Yekyung Kim and Jenna Russell and Marzena Karpinska and Mohit Iyyer},
+booktitle={Second Conference on Language Modeling},
+year={2025},
+url={https://openreview.net/forum?id=3vxxB3Ar9r}
+}
+
+@inproceedings{
+longcodebench,
+title={{L}ong{C}ode{B}ench: Evaluating Coding {LLM}s at 1{M} Context Windows},
+author={Stefano Rando and Luca Romani and Alessio Sampieri and Luca Franco and John Yang and Yuta Kyuragi and Fabio Galasso and Tatsunori Hashimoto},
+booktitle={Second Conference on Language Modeling},
+year={2025},
+url={https://openreview.net/forum?id=GFPoM8Ylp8}
+}
+
+@inproceedings{
+seerattnr,
+title={Sparse Attention Adaptation for Long Reasoning},
+author={Yizhao Gao and Shuming Guo and Shijie Cao and Yuqing Xia and Yu Cheng and Lei Wang and Lingxiao Ma and Yutao Sun and Tianzhu Ye and Li Dong and Hayden Kwok-Hay So and Yu Hua and Ting Cao and Fan Yang and Mao Yang},
+booktitle={The Fourteenth International Conference on Learning Representations},
+year={2026},
+url={https://openreview.net/forum?id=c5BOcHM6J8}
+}
+
+@inproceedings{triton,
+author = {Tillet, Philippe and Kung, H. T. and Cox, David},
+title = {Triton: an intermediate language and compiler for tiled neural network computations},
+year = {2019},
+isbn = {9781450367196},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3315508.3329973},
+doi = {10.1145/3315508.3329973},
+abstract = {The validation and deployment of novel research ideas in the field of Deep Learning is often limited by the availability of efficient compute kernels for certain basic primitives. In particular, operations that cannot leverage existing vendor libraries (e.g., cuBLAS, cuDNN) are at risk of facing poor device utilization unless custom implementations are written by experts – usually at the expense of portability. For this reason, the development of new programming abstractions for specifying custom Deep Learning workloads at a minimal performance cost has become crucial. We present Triton, a language and compiler centered around the concept of tile, i.e., statically shaped multi-dimensional sub-arrays. Our approach revolves around (1) a C-based language and an LLVM-based intermediate representation (IR) for expressing tensor programs in terms of operations on parametric tile variables and (2) a set of novel tile-level optimization passes for compiling these programs into efficient GPU code. We demonstrate how Triton can be used to build portable implementations of matrix multiplication and convolution kernels on par with hand-tuned vendor libraries (cuBLAS / cuDNN), or for efficiently implementing recent research ideas such as shift convolutions.},
+booktitle = {Proceedings of the 3rd ACM SIGPLAN International Workshop on Machine Learning and Programming Languages},
+pages = {10–19},
+numpages = {10},
+keywords = {neural networks, compiler, GPU},
+location = {Phoenix, AZ, USA},
+series = {MAPL 2019}
+}
+
+@inproceedings{
+adakv,
+title={Ada-{KV}: Optimizing {KV} Cache Eviction by Adaptive Budget Allocation for Efficient {LLM} Inference},
+author={Yuan Feng and Junlin Lv and Yukun Cao and Xike Xie and S Kevin Zhou},
+booktitle={The Thirty-ninth Annual Conference on Neural Information Processing Systems},
+year={2025},
+url={https://openreview.net/forum?id=tcisuhGsQZ}
+}
+
+@inproceedings{
+headkv,
+title={Not All Heads Matter: A Head-Level {KV} Cache Compression Method with Integrated Retrieval and Reasoning},
+author={Yu Fu and Zefan Cai and Abedelkadir Asi and Wayne Xiong and Yue Dong and Wen Xiao},
+booktitle={The Thirteenth International Conference on Learning Representations},
+year={2025},
+url={https://openreview.net/forum?id=FJFVmeXusW}
+}
+
+@inproceedings{
+trimkv,
+title={Cache What Lasts: Token Retention for Memory-Bounded {KV} Cache in {LLM}s},
+author={Ngoc Bui and Shubham Sharma and Simran Lamba and Saumitra Mishra and Rex Ying},
+booktitle={The Fourteenth International Conference on Learning Representations},
+year={2026},
+url={https://openreview.net/forum?id=qCaq3jGb0S}
+}
+
+@inproceedings{
+twilight,
+title={Twilight: Adaptive Attention Sparsity with Hierarchical Top-$p$ Pruning},
+author={Chaofan Lin and Jiaming Tang and Shuo Yang and Hanshuo Wang and Tian Tang and Boyu Tian and Ion Stoica and Song Han and Mingyu Gao},
+booktitle={The Thirty-ninth Annual Conference on Neural Information Processing Systems},
+year={2025},
+url={https://openreview.net/forum?id=Ve693NkzcU}
+}
+
+@inproceedings{
+sparq,
+title={{SparQ} Attention: Bandwidth-Efficient {LLM} Inference},
+author={Luka Ribar and Ivan Chelombiev and Luke Hudlass-Galley and Charlie Blake and Carlo Luschi and Douglas Orr},
+booktitle={Forty-first International Conference on Machine Learning},
+year={2024},
+url={https://openreview.net/forum?id=OS5dqxmmtl}
+}
+
+@inproceedings{
+quest,
+title={QUEST: Query-Aware Sparsity for Efficient Long-Context {LLM} Inference},
+author={Jiaming Tang and Yilong Zhao and Kan Zhu and Guangxuan Xiao and Baris Kasikci and Song Han},
+booktitle={Forty-first International Conference on Machine Learning},
+year={2024},
+url={https://openreview.net/forum?id=KzACYw0MTV}
+}
+
+@inproceedings{
+h2o,
+title={{H2O}: Heavy-Hitter Oracle for Efficient Generative Inference of Large Language Models},
+author={Zhenyu Zhang and Ying Sheng and Tianyi Zhou and Tianlong Chen and Lianmin Zheng and Ruisi Cai and Zhao Song and Yuandong Tian and Christopher Re and Clark Barrett and Zhangyang Wang and Beidi Chen},
+booktitle={Thirty-seventh Conference on Neural Information Processing Systems},
+year={2023},
+url={https://openreview.net/forum?id=RkRrPp7GKO}
+}
+
+@inproceedings{tova,
+    title = "Transformers are Multi-State {RNN}s",
+    author = "Oren, Matanel  and
+      Hassid, Michael  and
+      Yarden, Nir  and
+      Adi, Yossi  and
+      Schwartz, Roy",
+    editor = "Al-Onaizan, Yaser  and
+      Bansal, Mohit  and
+      Chen, Yun-Nung",
+    booktitle = "Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing",
+    month = nov,
+    year = "2024",
+    address = "Miami, Florida, USA",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2024.emnlp-main.1043/",
+    doi = "10.18653/v1/2024.emnlp-main.1043",
+    pages = "18724--18741"
+}
+
+@inproceedings{longbenchv2,
+    title = "{L}ong{B}ench v2: Towards Deeper Understanding and Reasoning on Realistic Long-context Multitasks",
+    author = "Bai, Yushi  and
+      Tu, Shangqing  and
+      Zhang, Jiajie  and
+      Peng, Hao  and
+      Wang, Xiaozhi  and
+      Lv, Xin  and
+      Cao, Shulin  and
+      Xu, Jiazheng  and
+      Hou, Lei  and
+      Dong, Yuxiao  and
+      Tang, Jie  and
+      Li, Juanzi",
+    editor = "Che, Wanxiang  and
+      Nabende, Joyce  and
+      Shutova, Ekaterina  and
+      Pilehvar, Mohammad Taher",
+    booktitle = "Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    month = jul,
+    year = "2025",
+    address = "Vienna, Austria",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2025.acl-long.183/",
+    doi = "10.18653/v1/2025.acl-long.183",
+    pages = "3639--3664",
+    ISBN = "979-8-89176-251-0",
+    abstract = "This paper introduces LongBench v2, a benchmark designed to assess the ability of LLMs to handle long-context problems requiring deep understanding and reasoning across real-world multitasks. LongBench v2 consists of 503 challenging multiple-choice questions, with contexts ranging from 8k to 2M words, across six major task categories: single-document QA, multi-document QA, long in-context learning, long-dialogue history understanding, code repository understanding, and long structured data understanding. To ensure the breadth and the practicality, we collect data from nearly 100 highly educated individuals with diverse professional backgrounds. We employ both automated and manual review processes to maintain high quality and difficulty, resulting in human experts achieving only 53.7{\%} accuracy under a 15-minute time constraint. Our evaluation reveals that the best-performing model, when directly answers the questions, achieves only 50.1{\%} accuracy. In contrast, the o1-preview model, which includes longer reasoning, achieves 57.7{\%}, surpassing the human baseline by 4{\%}. These results highlight the importance of enhanced reasoning ability and scaling inference-time compute to tackle the long-context challenges in LongBench v2."
+}
+
+@inproceedings{coderepoqa,
+author = {Hu, Ruida and Peng, Chao and Ren, Jingyi and Jiang, Bo and Meng, Xiangxin and Wu, Qinyun and Gao, Pengfei and Wang, Xinchen and Gao, Cuiyun},
+title = {Understanding Large Language Model Performance in Software Engineering: A Large-scale Question Answering Benchmark},
+year = {2025},
+isbn = {9798400715921},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3726302.3730262},
+doi = {10.1145/3726302.3730262},
+abstract = {In this work, we introduce CodeRepoQA, a large-scale benchmark specifically designed for evaluating repository-level question-answering capabilities in the field of software engineering. CodeRepoQA encompasses five programming languages and covers a wide range of scenarios, enabling comprehensive evaluation of language models.To construct this dataset, we crawl data from 30 well-known repositories in GitHub, the largest platform for hosting and collaborating on code, and carefully filter the raw data.In total, CodeRepoQA is a multi-turn question-answering benchmark with 585,687 entries. It covers a diverse array of software engineering scenarios, with an average of 6.62 dialogue turns per entry.We evaluate ten popular large language models on our dataset and provide in-depth analysis. We find that LLMs still have limitations in question-answering capabilities in the field of software engineering, and medium-length contexts are more conducive to their performance. The entire benchmark and details are publicly available at https://github.com/kinesiatricssxilm14/CodeRepoQA.},
+booktitle = {Proceedings of the 48th International ACM SIGIR Conference on Research and Development in Information Retrieval},
+pages = {3025–3029},
+numpages = {5},
+keywords = {language model, mining software repository, question answering},
+location = {Padua, Italy},
+series = {SIGIR '25}
+}
+
+@inproceedings{
+planandact,
+title={Plan-and-{A}ct: Improving Planning of Agents for Long-Horizon Tasks},
+author={Lutfi Eren Erdogan and Hiroki Furuta and Sehoon Kim and Nicholas Lee and Suhong Moon and Gopala Anumanchipalli and Kurt Keutzer and Amir Gholami},
+booktitle={Forty-second International Conference on Machine Learning},
+year={2025},
+url={https://openreview.net/forum?id=ybA4EcMmUZ}
+}
+
+@inproceedings{
+minference,
+title={{MI}nference 1.0: Accelerating Pre-filling for Long-Context {LLM}s via Dynamic Sparse Attention},
+author={Huiqiang Jiang and YUCHENG LI and Chengruidong Zhang and Qianhui Wu and Xufang Luo and Surin Ahn and Zhenhua Han and Amir H. Abdi and Dongsheng Li and Chin-Yew Lin and Yuqing Yang and Lili Qiu},
+booktitle={The Thirty-eighth Annual Conference on Neural Information Processing Systems},
+year={2024},
+url={https://openreview.net/forum?id=fPBACAbqSN}
+}
+
+@inproceedings{pagedattn,
+author = {Kwon, Woosuk and Li, Zhuohan and Zhuang, Siyuan and Sheng, Ying and Zheng, Lianmin and Yu, Cody Hao and Gonzalez, Joseph and Zhang, Hao and Stoica, Ion},
+title = {Efficient Memory Management for Large Language Model Serving with {PagedAttention}},
+year = {2023},
+isbn = {9798400702297},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3600006.3613165},
+doi = {10.1145/3600006.3613165},
+abstract = {High throughput serving of large language models (LLMs) requires batching sufficiently many requests at a time. However, existing systems struggle because the key-value cache (KV cache) memory for each request is huge and grows and shrinks dynamically. When managed inefficiently, this memory can be significantly wasted by fragmentation and redundant duplication, limiting the batch size. To address this problem, we propose PagedAttention, an attention algorithm inspired by the classical virtual memory and paging techniques in operating systems. On top of it, we build vLLM, an LLM serving system that achieves (1) near-zero waste in KV cache memory and (2) flexible sharing of KV cache within and across requests to further reduce memory usage. Our evaluations show that vLLM improves the throughput of popular LLMs by 2--4\texttimes{} with the same level of latency compared to the state-of-the-art systems, such as FasterTransformer and Orca. The improvement is more pronounced with longer sequences, larger models, and more complex decoding algorithms. vLLM's source code is publicly available at https://github.com/vllm-project/vllm.},
+booktitle = {Proceedings of the 29th Symposium on Operating Systems Principles},
+pages = {611–626},
+numpages = {16},
+location = {Koblenz, Germany},
+series = {SOSP '23}
+}
+
+@inproceedings{attn,
+ author = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N and Kaiser, \L ukasz and Polosukhin, Illia},
+ booktitle = {Advances in Neural Information Processing Systems},
+ editor = {I. Guyon and U. Von Luxburg and S. Bengio and H. Wallach and R. Fergus and S. Vishwanathan and R. Garnett},
+ pages = {},
+ publisher = {Curran Associates, Inc.},
+ title = {Attention is All you Need},
+ url = {https://proceedings.neurips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf},
+ volume = {30},
+ year = {2017}
+}
+
+@inproceedings {infinigen,
+author = {Wonbeom Lee and Jungi Lee and Junghwan Seo and Jaewoong Sim},
+title = {{InfiniGen}: Efficient Generative Inference of Large Language Models with Dynamic {KV} Cache Management},
+booktitle = {18th USENIX Symposium on Operating Systems Design and Implementation (OSDI 24)},
+year = {2024},
+isbn = {978-1-939133-40-3},
+address = {Santa Clara, CA},
+pages = {155--172},
+url = {https://www.usenix.org/conference/osdi24/presentation/lee},
+publisher = {USENIX Association},
+month = jul
+}
+
+@inproceedings{
+flashattn,
+title={{FlashAttention}: Fast and Memory-Efficient Exact Attention with {IO}-Awareness},
+author={Tri Dao and Daniel Y Fu and Stefano Ermon and Atri Rudra and Christopher Re},
+booktitle={Advances in Neural Information Processing Systems},
+editor={Alice H. Oh and Alekh Agarwal and Danielle Belgrave and Kyunghyun Cho},
+year={2022},
+url={https://openreview.net/forum?id=H4DqfPSibmx}
+}
+
+@inproceedings{
+flexattn,
+title={{FlexAttention}: A Programming Model for Generating Fused Attention Variants},
+author={Juechu Dong and BOYUAN FENG and Driss Guessous and Yanbo Liang and Horace He},
+booktitle={Eighth Conference on Machine Learning and Systems},
+year={2025},
+url={https://openreview.net/forum?id=2QMYV4bA0R}
+}
+
+@inproceedings{
+streamingllm,
+title={Efficient Streaming Language Models with Attention Sinks},
+author={Guangxuan Xiao and Yuandong Tian and Beidi Chen and Song Han and Mike Lewis},
+booktitle={The Twelfth International Conference on Learning Representations},
+year={2024},
+url={https://openreview.net/forum?id=NG7sS51zVF}
+}
+
+@inproceedings{
+duoattn,
+title={{DuoAttention}: Efficient Long-Context {LLM} Inference with Retrieval and Streaming Heads},
+author={Guangxuan Xiao and Jiaming Tang and Jingwei Zuo and junxian guo and Shang Yang and Haotian Tang and Yao Fu and Song Han},
+booktitle={The Thirteenth International Conference on Learning Representations},
+year={2025},
+url={https://openreview.net/forum?id=cFu7ze7xUm}
+}
+
+@inproceedings{
+helmet,
+title={{HELMET}: How to Evaluate Long-context Models Effectively and Thoroughly},
+author={Howard Yen and Tianyu Gao and Minmin Hou and Ke Ding and Daniel Fleischer and Peter Izsak and Moshe Wasserblat and Danqi Chen},
+booktitle={The Thirteenth International Conference on Learning Representations},
+year={2025},
+url={https://openreview.net/forum?id=293V3bJbmE}
+}
+
+@inproceedings{
+fineweb,
+title={The {FineWeb} Datasets: Decanting the Web for the Finest Text Data at Scale},
+author={Guilherme Penedo and Hynek Kydl{\'\i}{\v{c}}ek and Loubna Ben allal and Anton Lozhkov and Margaret Mitchell and Colin Raffel and Leandro Von Werra and Thomas Wolf},
+booktitle={The Thirty-eight Conference on Neural Information Processing Systems Datasets and Benchmarks Track},
+year={2024},
+url={https://openreview.net/forum?id=n6SCkn2QaG}
+}
+
+@inproceedings{
+adamw,
+title={Decoupled Weight Decay Regularization},
+author={Ilya Loshchilov and Frank Hutter},
+booktitle={International Conference on Learning Representations},
+year={2019},
+url={https://openreview.net/forum?id=Bkg6RiCqY7},
+}
+
+@inproceedings{
+lserve,
+title={{LS}erve: Efficient Long-sequence {LLM} Serving with Unified Sparse Attention},
+author={Shang Yang and Junxian Guo and Haotian Tang and Qinghao Hu and Guangxuan Xiao and Jiaming Tang and Yujun Lin and Zhijian Liu and Yao Lu and Song Han},
+booktitle={Eighth Conference on Machine Learning and Systems},
+year={2025},
+url={https://openreview.net/forum?id=KQ4pJFFqT1}
+}
+
+@inproceedings{
+hip,
+title={A Training-Free Sub-quadratic Cost Transformer Model Serving Framework with Hierarchically Pruned Attention},
+author={Heejun Lee and Geon Park and Youngwan Lee and Jaduk Suh and Jina Kim and Wonyong Jeong and Bumsik Kim and Hyemin Lee and Myeongjae Jeon and Sung Ju Hwang},
+booktitle={The Thirteenth International Conference on Learning Representations},
+year={2025},
+url={https://openreview.net/forum?id=PTcMzQgKmn}
+}
+
+@inproceedings{
+sea,
+title={{SEA}: Sparse Linear Attention with Estimated Attention Mask},
+author={Heejun Lee and Jina Kim and Jeffrey Willette and Sung Ju Hwang},
+booktitle={The Twelfth International Conference on Learning Representations},
+year={2024},
+url={https://openreview.net/forum?id=JbcwfmYrob}
+}
+
+@inproceedings{
+loki,
+title={Loki: Low-rank Keys for Efficient Sparse Attention},
+author={Prajwal Singhania and Siddharth Singh and Shwai He and Soheil Feizi and Abhinav Bhatele},
+booktitle={The Thirty-eighth Annual Conference on Neural Information Processing Systems},
+year={2024},
+url={https://openreview.net/forum?id=raABeiV71j}
+}
+
+@inproceedings{
+magicpig,
+title={Magic{PIG}: {LSH} Sampling for Efficient {LLM} Generation},
+author={Zhuoming Chen and Ranajoy Sadhukhan and Zihao Ye and Yang Zhou and Jianyu Zhang and Niklas Nolte and Yuandong Tian and Matthijs Douze and Leon Bottou and Zhihao Jia and Beidi Chen},
+booktitle={The Thirteenth International Conference on Learning Representations},
+year={2025},
+url={https://openreview.net/forum?id=ALzTQUgW8a}
+}
+
+@inproceedings{
+retrievalattn,
+title={{RetrievalAttention}: Accelerating Long-Context {LLM} Inference via Vector Retrieval},
+author={Di Liu and Meng Chen and Baotong Lu and Huiqiang Jiang and Zhenhua Han and Qianxi Zhang and Qi Chen and Chengruidong Zhang and Bailu Ding and Kai Zhang and Chen Chen and Fan Yang and Yuqing Yang and Lili Qiu},
+booktitle={The Thirty-ninth Annual Conference on Neural Information Processing Systems},
+year={2025},
+url={https://openreview.net/forum?id=8z3cOVER4z}
+}
+
+@inproceedings{squeezedattn,
+    title = "{S}queezed {A}ttention: Accelerating Long Context Length {LLM} Inference",
+    author = "Hooper, Coleman Richard Charles  and
+      Kim, Sehoon  and
+      Mohammadzadeh, Hiva  and
+      Maheswaran, Monishwaran  and
+      Zhao, Sebastian  and
+      Paik, June  and
+      Mahoney, Michael W.  and
+      Keutzer, Kurt  and
+      Gholami, Amir",
+    editor = "Che, Wanxiang  and
+      Nabende, Joyce  and
+      Shutova, Ekaterina  and
+      Pilehvar, Mohammad Taher",
+    booktitle = "Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    month = jul,
+    year = "2025",
+    address = "Vienna, Austria",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2025.acl-long.1568/",
+    doi = "10.18653/v1/2025.acl-long.1568",
+    pages = "32631--32652",
+    ISBN = "979-8-89176-251-0",
+    abstract = "Emerging Large Language Model (LLM) applications require long input context in order to perform complex tasks like document analysis and code generation.For these long context length applications, the length of the input prompt poses a significant challenge in terms of inference efficiency since the inference costs increase linearly with sequence length.However, for many of these applications, much of the context in the prompt is fixed across different user inputs, thereby providing the opportunity to perform offline optimizations in order to process user inputs quickly, as they are received. We propose Squeezed Attention to accelerate LLM applications where a large portion of the input context is fixed.We first leverage K-means clustering offline to group the keys for the fixed context based on semantic similarity and represent each cluster with a single centroid value.During inference, we compare query tokens from the user input with the centroids to predict which keys from the fixed context are semantically relevant, and then compute exact attention using only the important keys, thereby reducing bandwidth and computational costs. We also present a hierarchical version of our algorithm which can reduce the complexity of attention from linear to logarithmic with respect to the fixed context length.We evaluate our method on various long-context benchmarks including LongBench, where it achieves a 3.1$\times$ reduction in KV budget with no noticeable accuracy loss and up to an 8$\times$ reduction with only a 0.5 point accuracy gap for the LLaMA-2-7B-32K, LWM-Text-Chat-1M, and Longchat-7B-v1.5-32K models.Futhermore, we implement kernels for centroid comparison and sparse FlashAttention with important keys, achieving more than 4$\times$ speedups during both the prefill and generation phases for long-context inference.Our code is available at https://github.com/SqueezeAILab/SqueezedAttention."
+}
+
+@inproceedings{clusterkv,
+author = {Liu, Guangda and Li, Chengwei and Zhao, Jieru and Zhang, Chenqi and Guo, Minyi},
+title = {{ClusterKV}: Manipulating {LLM} {KV} Cache in Semantic Space for Recallable Compression},
+year = {2025},
+isbn = {9798331503048},
+publisher = {IEEE Press},
+url = {https://doi.org/10.1109/DAC63849.2025.11132479},
+doi = {10.1109/DAC63849.2025.11132479},
+abstract = {Large Language Models (LLMs) have been widely deployed in a variety of applications, and the context length is rapidly increasing to handle tasks such as long-document QA and complex logical reasoning. However, long context poses significant challenges for inference efficiency, including high memory costs of key-value (KV) cache and increased latency due to extensive memory accesses. Recent works have proposed compressing KV cache to approximate computation, but these methods either evict tokens permanently, never recalling them for later inference, or recall previous tokens at the granularity of pages divided by textual positions. Both approaches degrade the model accuracy and output quality. To achieve efficient and accurate recallable KV cache compression, we introduce ClusterKV, which recalls tokens at the granularity of semantic clusters. We design and implement efficient algorithms and systems for clustering, selection, indexing and caching. Experiment results show that ClusterKV attains negligible accuracy loss across various tasks with 32k context lengths, using only a 1k to 2k KV cache budget, and achieves up to a 2X speedup in latency and a 2.5X improvement in decoding throughput. Compared to SoTA recallable KV compression methods, ClusterKV demonstrates higher model accuracy and output quality, while maintaining or exceeding inference efficiency. Our code is available at https://github.com/sjtu-zhao-lab/ClusterKV.},
+booktitle = {Proceedings of the 62nd Annual ACM/IEEE Design Automation Conference},
+articleno = {44},
+numpages = {7},
+location = {San Francisco, California, United States},
+series = {DAC '25}
+}
+
+@inproceedings{
+arkvale,
+title={{ArkVale}: Efficient Generative {LLM} Inference with Recallable Key-Value Eviction},
+author={Renze Chen and Zhuofeng Wang and Beiquan Cao and Tong Wu and Size Zheng and Xiuhong Li and Xuechao Wei and Shengen Yan and Meng Li and Yun Liang},
+booktitle={The Thirty-eighth Annual Conference on Neural Information Processing Systems},
+year={2024},
+url={https://openreview.net/forum?id=4oAt5L4lYe}
+}
+
+@inproceedings{
+shadowkv,
+title={Shadow{KV}: {KV} Cache in Shadows for High-Throughput Long-Context {LLM} Inference},
+author={Hanshi Sun and Li-Wen Chang and Wenlei Bao and Size Zheng and Ningxin Zheng and Xin Liu and Harry Dong and Yuejie Chi and Beidi Chen},
+booktitle={Forty-second International Conference on Machine Learning},
+year={2025},
+url={https://openreview.net/forum?id=oa7MYAO6h6}
+}
+
+@inproceedings{
+specache,
+title={{SpeCache}: Speculative Key-Value Caching for Efficient Generation of {LLM}s},
+author={Shibo Jie and Yehui Tang and Kai Han and Zhi-Hong Deng and Jing Han},
+booktitle={Forty-second International Conference on Machine Learning},
+year={2025},
+url={https://openreview.net/forum?id=PQIrsaIQdn}
+}
+
+@inproceedings{
+omnikv,
+title={Omni{KV}: Dynamic Context Selection for Efficient Long-Context {LLM}s},
+author={Jitai Hao and Yuke Zhu and Tian Wang and Jun Yu and Xin Xin and Bo Zheng and Zhaochun Ren and Sheng Guo},
+booktitle={The Thirteenth International Conference on Learning Representations},
+year={2025},
+url={https://openreview.net/forum?id=ulCAPXYXfa}
+}
+
+@inproceedings{sirllm,
+    title = "{S}ir{LLM}: Streaming Infinite Retentive {LLM}",
+    author = "Yao, Yao  and
+      Li, Zuchao  and
+      Zhao, Hai",
+    editor = "Ku, Lun-Wei  and
+      Martins, Andre  and
+      Srikumar, Vivek",
+    booktitle = "Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    month = aug,
+    year = "2024",
+    address = "Bangkok, Thailand",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2024.acl-long.143/",
+    doi = "10.18653/v1/2024.acl-long.143",
+    pages = "2611--2624",
+    abstract = "As Large Language Models (LLMs) become increasingly prevalent in various domains, their ability to process inputs of any length and maintain a degree of memory becomes essential. However, the one-off input of overly long texts is limited, as studies have shown that when input lengths exceed the LLMs' pre-trained text length, there is a dramatic decline in text generation capabilities. Moreover, simply extending the length of pre-training texts is impractical due to the difficulty in obtaining long text data and the substantial memory consumption costs this would entail for LLMs. Recent efforts have employed streaming inputs to alleviate the pressure of excessively long text inputs, but this approach can significantly impair the model{'}s long-term memory capabilities.Motivated by this challenge, we introduce Streaming Infinite Retentive LLM (SirLLM), which allows LLMs to maintain longer memory during infinite-length dialogues without the need for fine-tuning. SirLLM utilizes the Token Entropy metric and a memory decay mechanism to filter key phrases, endowing LLMs with both long-lasting and flexible memory. We designed three distinct tasks and constructed three datasets to measure the effectiveness of SirLLM from various angles: (1) DailyDialog; (2) Grocery Shopping; (3) Rock-Paper-Scissors. Our experimental results robustly demonstrate that SirLLM can achieve stable and significant improvements across different LLMs and tasks, compellingly proving its effectiveness. When having a coversation, ``A sir could forget himself,'' but SirLLM never does! Our code is publicly available at https://github.com/Zoeyyao27/SirLLMhttps://github.com/Zoeyyao27/SirLLM"
+}
+
+@inproceedings{l2norm,
+    title = "A Simple and Effective $L_2$ Norm-Based Strategy for {KV} Cache Compression",
+    author = "Devoto, Alessio  and
+      Zhao, Yu  and
+      Scardapane, Simone  and
+      Minervini, Pasquale",
+    editor = "Al-Onaizan, Yaser  and
+      Bansal, Mohit  and
+      Chen, Yun-Nung",
+    booktitle = "Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing",
+    month = nov,
+    year = "2024",
+    address = "Miami, Florida, USA",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2024.emnlp-main.1027/",
+    doi = "10.18653/v1/2024.emnlp-main.1027",
+    pages = "18476--18499",
+    abstract = "The deployment of large language models (LLMs) is often hindered by the extensive memory requirements of the Key-Value (KV) cache, especially as context lengths increase. Existing approaches to reduce the KV cache size involve either fine-tuning the model to learn a compression strategy or leveraging attention scores to reduce the sequence length. We analyse the attention distributions in decoder-only Transformers-based models and observe that attention allocation patterns stay consistent across most layers. Surprisingly, we find a clear correlation between the $L_2$ norm and the attention scores over cached KV pairs, where a low $L_2$ norm of a key embedding usually leads to a high attention score during decoding. This finding indicates that the influence of a KV pair is potentially determined by the key embedding itself before being queried. Based on this observation, we compress the KV cache based on the $L_2$ norm of key embeddings. Our experimental results show that this simple strategy can reduce the KV cache size by 50{\%} on language modelling and needle-in-a-haystack tasks and 90{\%} on passkey retrieval tasks without losing accuracy. Moreover, without relying on the attention scores, this approach remains compatible with FlashAttention, enabling broader applicability."
+}
+
+@inproceedings{
+dcp,
+title={Dynamic Context Pruning for Efficient and Interpretable Autoregressive Transformers},
+author={Sotiris Anagnostidis and Dario Pavllo and Luca Biggio and Lorenzo Noci and Aurelien Lucchi and Thomas Hofmann},
+booktitle={Thirty-seventh Conference on Neural Information Processing Systems},
+year={2023},
+url={https://openreview.net/forum?id=uvdJgFFzby}
+}
+
+@inproceedings{
+snapkv,
+title={Snap{KV}: {LLM} Knows What You are Looking for Before Generation},
+author={Yuhong Li and Yingbing Huang and Bowen Yang and Bharat Venkitesh and Acyr Locatelli and Hanchen Ye and Tianle Cai and Patrick Lewis and Deming Chen},
+booktitle={The Thirty-eighth Annual Conference on Neural Information Processing Systems},
+year={2024},
+url={https://openreview.net/forum?id=poE54GOq2l}
+}
+
+@inproceedings{nacl,
+    title = "{NACL}: A General and Effective {KV} Cache Eviction Framework for {LLM} at Inference Time",
+    author = "Chen, Yilong  and
+      Wang, Guoxia  and
+      Shang, Junyuan  and
+      Cui, Shiyao  and
+      Zhang, Zhenyu  and
+      Liu, Tingwen  and
+      Wang, Shuohuan  and
+      Sun, Yu  and
+      Yu, Dianhai  and
+      Wu, Hua",
+    editor = "Ku, Lun-Wei  and
+      Martins, Andre  and
+      Srikumar, Vivek",
+    booktitle = "Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    month = aug,
+    year = "2024",
+    address = "Bangkok, Thailand",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2024.acl-long.428/",
+    doi = "10.18653/v1/2024.acl-long.428",
+    pages = "7913--7926",
+    abstract = "Large Language Models (LLMs) have ignited an innovative surge of AI applications, marking a new era of exciting possibilities equipped with extended context windows. However, hosting these models is cost-prohibitive mainly due to the extensive memory consumption of KV Cache involving long-context modeling. Despite several works proposing to evict unnecessary tokens from the KV Cache, most of them rely on the biased local statistics of accumulated attention scores and report performance using unconvincing metric like perplexity on inadequate short-text evaluation. In this paper, we propose NACL, a general framework for long-context KV cache eviction that achieves more optimal and efficient eviction in a single operation during the encoding phase. Due to NACL{'}s efficiency, we combine more accurate attention score statistics in Proxy-Tokens Eviction with the diversified random eviction strategy of Random Eviction, aiming to alleviate the issue of attention bias and enhance the robustness in maintaining pivotal tokens for long-context modeling tasks. Notably, our method significantly improves the performance on short- and long-text tasks by 80{\%} and 76{\%} respectively, reducing KV Cache by up to $5\times$ with over 95{\%} performance maintenance. Code available at https://github.com/PaddlePaddle/Research/tree/master/NLP/ACL2024-NACL."
+}
+
+@inproceedings{pyramidinfer,
+    title = "{P}yramid{I}nfer: Pyramid {KV} Cache Compression for High-throughput {LLM} Inference",
+    author = "Yang, Dongjie  and
+      Han, Xiaodong  and
+      Gao, Yan  and
+      Hu, Yao  and
+      Zhang, Shilin  and
+      Zhao, Hai",
+    editor = "Ku, Lun-Wei  and
+      Martins, Andre  and
+      Srikumar, Vivek",
+    booktitle = "Findings of the Association for Computational Linguistics: ACL 2024",
+    month = aug,
+    year = "2024",
+    address = "Bangkok, Thailand",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2024.findings-acl.195/",
+    doi = "10.18653/v1/2024.findings-acl.195",
+    pages = "3258--3270",
+    abstract = "Large Language Models (LLMs) have shown remarkable comprehension abilities but face challenges in GPU memory usage during inference, hindering their scalability for real-time applications like chatbots. To accelerate inference, we store computed keys and values (KV cache) in the GPU memory. Existing methods study the KV cache compression to reduce memory by pruning the pre-computed KV cache. However, they neglect the inter-layer dependency between layers and huge memory consumption in pre-computation. To explore these deficiencies, we find that the number of crucial keys and values that influence future generations decreases layer by layer and we can extract them by the consistency in attention weights. Based on the findings, we propose PyramidInfer, a method that compresses the KV cache by layer-wise retaining crucial context. PyramidInfer saves significant memory by computing fewer keys and values without sacrificing performance. Experimental results show PyramidInfer improves 2.2x throughput compared to Accelerate with over 54{\%} GPU memory reduction in KV cache."
+}
+
+@inproceedings{
+kvzip,
+title={{KV}zip: Query-Agnostic {KV} Cache Compression with Context Reconstruction},
+author={Jang-Hyun Kim and Jinuk Kim and Sangwoo Kwon and Jae W. Lee and Sangdoo Yun and Hyun Oh Song},
+booktitle={The Thirty-ninth Annual Conference on Neural Information Processing Systems},
+year={2025},
+url={https://openreview.net/forum?id=JFygzwx8SJ}
+}
+
+@inproceedings{
+razorattn,
+title={{R}azor{A}ttention: Efficient {KV} Cache Compression Through Retrieval Heads},
+author={Hanlin Tang and Yang Lin and Jing Lin and Qingsen Han and Danning Ke and Shikuan Hong and Yiwu Yao and Gongyi Wang},
+booktitle={The Thirteenth International Conference on Learning Representations},
+year={2025},
+url={https://openreview.net/forum?id=tkiZQlL04w}
+}
+
+@inproceedings{
+retrievalhead,
+title={Retrieval Head Mechanistically Explains Long-Context Factuality},
+author={Wenhao Wu and Yizhong Wang and Guangxuan Xiao and Hao Peng and Yao Fu},
+booktitle={The Thirteenth International Conference on Learning Representations},
+year={2025},
+url={https://openreview.net/forum?id=EytBpUGB1Z}
+}
+
+@inproceedings{
+fastgen,
+title={Model Tells You What to Discard: Adaptive {KV} Cache Compression for {LLM}s},
+author={Suyu Ge and Yunan Zhang and Liyuan Liu and Minjia Zhang and Jiawei Han and Jianfeng Gao},
+booktitle={The Twelfth International Conference on Learning Representations},
+year={2024},
+url={https://openreview.net/forum?id=uNrFpDPMyo}
+}
+
+@inproceedings{
+cam,
+title={{C}a{M}: Cache Merging for Memory-efficient {LLM}s Inference},
+author={Yuxin Zhang and Yuxuan Du and Gen Luo and Yunshan Zhong and Zhenyu Zhang and Shiwei Liu and Rongrong Ji},
+booktitle={Forty-first International Conference on Machine Learning},
+year={2024},
+url={https://openreview.net/forum?id=LCTmppB165}
+}
+
+@inproceedings{
+less,
+title={Get More with {LESS}: Synthesizing Recurrence with {KV} Cache Compression for Efficient {LLM} Inference},
+author={Harry Dong and Xinyu Yang and Zhenyu Zhang and Zhangyang Wang and Yuejie Chi and Beidi Chen},
+booktitle={Forty-first International Conference on Machine Learning},
+year={2024},
+url={https://openreview.net/forum?id=uhHDhVKFMW}
+}
+
+@inproceedings{
+dmc,
+title={Dynamic Memory Compression: Retrofitting {LLM}s for Accelerated Inference},
+author={Piotr Nawrot and Adrian {\L}a{\'n}cucki and Marcin Chochowski and David Tarjan and Edoardo Ponti},
+booktitle={Forty-first International Conference on Machine Learning},
+year={2024},
+url={https://openreview.net/forum?id=tDRYrAkOB7}
+}
+
+@inproceedings{
+dms,
+title={Inference-Time Hyper-Scaling with {KV} Cache Compression},
+author={Adrian {\L}a{\'n}cucki and Konrad Staniszewski and Piotr Nawrot and Edoardo Ponti},
+booktitle={The Thirty-ninth Annual Conference on Neural Information Processing Systems},
+year={2025},
+url={https://openreview.net/forum?id=8ZiElzQxf1}
+}
+
+@inproceedings{eigenattn,
+    title = "Eigen {A}ttention: Attention in Low-Rank Space for {KV} Cache Compression",
+    author = "Saxena, Utkarsh  and
+      Saha, Gobinda  and
+      Choudhary, Sakshi  and
+      Roy, Kaushik",
+    editor = "Al-Onaizan, Yaser  and
+      Bansal, Mohit  and
+      Chen, Yun-Nung",
+    booktitle = "Findings of the Association for Computational Linguistics: EMNLP 2024",
+    month = nov,
+    year = "2024",
+    address = "Miami, Florida, USA",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2024.findings-emnlp.899/",
+    doi = "10.18653/v1/2024.findings-emnlp.899",
+    pages = "15332--15344",
+    abstract = "Large language models (LLMs) represent a groundbreaking advancement in the domain of natural language processing due to their impressive reasoning abilities. Recently, there has been considerable interest in increasing the context lengths for these models to enhance their applicability to complex tasks. However, at long context lengths and large batch sizes, the key-value (KV) cache, which stores the attention keys and values, emerges as the new bottleneck in memory usage during inference. To address this, we propose Eigen Attention, which performs the attention operation in a low-rank space, thereby reducing the KV cache memory overhead. Our proposed approach is orthogonal to existing KV cache compression techniques and can be used synergistically with them. Through extensive experiments over OPT, MPT, and Llama model families, we demonstrate that Eigen Attention results in up to 40{\%} reduction in KV cache sizes and up to 60{\%} reduction in attention operation latency with minimal drop in performance."
+}
+
+@inproceedings{
+palu,
+title={Palu: {KV}-Cache Compression with Low-Rank Projection},
+author={Chi-Chih Chang and Wei-Cheng Lin and Chien-Yu Lin and Chong-Yan Chen and Yu-Fang Hu and Pei-Shuo Wang and Ning-Chi Huang and Luis Ceze and Mohamed S. Abdelfattah and Kai-Chiang Wu},
+booktitle={The Thirteenth International Conference on Learning Representations},
+year={2025},
+url={https://openreview.net/forum?id=LWMS4pk2vK}
+}
+
+@inproceedings{
+think,
+title={{T}hin{K}: Thinner Key Cache by Query-Driven Pruning},
+author={Yuhui Xu and Zhanming Jie and Hanze Dong and Lei Wang and Xudong Lu and Aojun Zhou and Amrita Saha and Caiming Xiong and Doyen Sahoo},
+booktitle={The Thirteenth International Conference on Learning Representations},
+year={2025},
+url={https://openreview.net/forum?id=n0OtGl6VGb}
+}
+
+@inproceedings{
+matryoshkakv,
+title={Matryoshka{KV}: Adaptive {KV} Compression via Trainable Orthogonal Projection},
+author={Bokai Lin and Zihao Zeng and Zipeng Xiao and Siqi Kou and TianQi Hou and Xiaofeng Gao and Hao Zhang and Zhijie Deng},
+booktitle={The Thirteenth International Conference on Learning Representations},
+year={2025},
+url={https://openreview.net/forum?id=BQwsRy1h3U}
+}
+
+@inproceedings{
+minicache,
+title={Mini{C}ache: {KV} Cache Compression in Depth Dimension for Large Language Models},
+author={Akide Liu and Jing Liu and Zizheng Pan and Yefei He and Gholamreza Haffari and Bohan Zhuang},
+booktitle={The Thirty-eighth Annual Conference on Neural Information Processing Systems},
+year={2024},
+url={https://openreview.net/forum?id=sgVOjDqUMT}
+}
+
+@inproceedings{lckv,
+    title = "Layer-{C}ondensed {KV} Cache for Efficient Inference of Large Language Models",
+    author = "Wu, Haoyi  and
+      Tu, Kewei",
+    editor = "Ku, Lun-Wei  and
+      Martins, Andre  and
+      Srikumar, Vivek",
+    booktitle = "Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    month = aug,
+    year = "2024",
+    address = "Bangkok, Thailand",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2024.acl-long.602/",
+    doi = "10.18653/v1/2024.acl-long.602",
+    pages = "11175--11188",
+    abstract = "Huge memory consumption has been a major bottleneck for deploying high-throughput large language models in real-world applications. In addition to the large number of parameters, the key-value (KV) cache for the attention mechanism in the transformer architecture consumes a significant amount of memory, especially when the number of layers is large for deep language models. In this paper, we propose a novel method that only computes and caches the KVs of a small number of layers, thus significantly saving memory consumption and improving inference throughput. Our experiments on large language models show that our method achieves up to 26$\times$ higher throughput than standard transformers and competitive performance in language modeling and downstream tasks. In addition, our method is orthogonal to existing transformer memory-saving techniques, so it is straightforward to integrate them with our model, achieving further improvement in inference efficiency. Our code is available at https://github.com/whyNLP/LCKV."
+}
+
+@inproceedings{
+cla,
+title={Reducing Transformer Key-Value Cache Size with Cross-Layer Attention},
+author={William Brandon and Mayank Mishra and Aniruddha Nrusimha and Rameswar Panda and Jonathan Ragan-Kelley},
+booktitle={The Thirty-eighth Annual Conference on Neural Information Processing Systems},
+year={2024},
+url={https://openreview.net/forum?id=M2UzLRoqic}
+}
+
+@inproceedings{
+kvquant,
+title={{KVQ}uant: Towards 10 Million Context Length {LLM} Inference with {KV} Cache Quantization},
+author={Coleman Richard Charles Hooper and Sehoon Kim and Hiva Mohammadzadeh and Michael W. Mahoney and Sophia Shao and Kurt Keutzer and Amir Gholami},
+booktitle={The Thirty-eighth Annual Conference on Neural Information Processing Systems},
+year={2024},
+url={https://openreview.net/forum?id=0LXotew9Du}
+}
+
+@inproceedings{
+flexprefill,
+title={Flex{P}refill: A Context-Aware Sparse Attention Mechanism for Efficient Long-Sequence Inference},
+author={Xunhao Lai and Jianqiao Lu and Yao Luo and Yiyuan Ma and Xun Zhou},
+booktitle={The Thirteenth International Conference on Learning Representations},
+year={2025},
+url={https://openreview.net/forum?id=OfjIlbelrT}
+}
+
+@inproceedings{
+xattn,
+title={{XA}ttention: Block Sparse Attention with Antidiagonal Scoring},
+author={Ruyi Xu and Guangxuan Xiao and Haofeng Huang and Junxian Guo and Song Han},
+booktitle={Forty-second International Conference on Machine Learning},
+year={2025},
+url={https://openreview.net/forum?id=KG6aBfGi6e}
+}
+
+@inproceedings{nsa,
+    title = "Native {S}parse {A}ttention: Hardware-Aligned and Natively Trainable Sparse Attention",
+    author = "Yuan, Jingyang  and
+      Gao, Huazuo  and
+      Dai, Damai  and
+      Luo, Junyu  and
+      Zhao, Liang  and
+      Zhang, Zhengyan  and
+      Xie, Zhenda  and
+      Wei, Yuxing  and
+      Wang, Lean  and
+      Xiao, Zhiping  and
+      Wang, Yuqing  and
+      Ruan, Chong  and
+      Zhang, Ming  and
+      Liang, Wenfeng  and
+      Zeng, Wangding",
+    editor = "Che, Wanxiang  and
+      Nabende, Joyce  and
+      Shutova, Ekaterina  and
+      Pilehvar, Mohammad Taher",
+    booktitle = "Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    month = jul,
+    year = "2025",
+    address = "Vienna, Austria",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2025.acl-long.1126/",
+    doi = "10.18653/v1/2025.acl-long.1126",
+    pages = "23078--23097",
+    ISBN = "979-8-89176-251-0",
+    abstract = "Long-context modeling is crucial for next-generation language models, yet the high computational cost of standard attention mechanisms poses significant computational challenges. Sparse attention offers a promising direction for improving efficiency while maintaining model capabilities. We present NSA, a Natively trained Sparse Attention mechanism that integrates algorithmic innovations with hardware-aligned optimizations to achieve efficient long-context modeling. NSA employs a dynamic hierarchical sparse strategy, combining coarse-grained token compression with fine-grained token selection to preserve both global context awareness and local precision. Our approach advances sparse attention design with two key innovations: (1) We achieve substantial speedups through arithmetic intensity-balanced algorithm design, with implementation optimizations for modern hardware. (2) We enable end-to-end training, reducing pretraining computation without sacrificing model performance. As shown in Figure 1, experiments show the model pretrained with NSA maintains or exceeds Full Attention models across general benchmarks, long-context tasks, and instruction-based reasoning. Meanwhile, NSA achieves substantial speedups over Full Attention on 64k-length sequences across decoding, forward propagation, and backward propagation, validating its efficiency throughout the model lifecycle."
+}
+
+@inproceedings{
+moba,
+title={Mo{BA}: Mixture of Block Attention for Long-Context {LLM}s},
+author={Enzhe Lu and Zhejun Jiang and Jingyuan Liu and Yulun Du and Tao Jiang and Chao Hong and Shaowei Liu and Weiran He and Enming Yuan and Yuzhi Wang and Zhiqi Huang and Huan Yuan and Suting Xu and Xinran Xu and Guokun Lai and Yanru Chen and Huabin Zheng and Junjie Yan and Jianlin Su and Yuxin Wu and Yutao Zhang and Zhilin Yang and Xinyu Zhou and Mingxing Zhang and Jiezhong Qiu},
+booktitle={The Thirty-ninth Annual Conference on Neural Information Processing Systems},
+year={2025},
+url={https://openreview.net/forum?id=RlqYCpTu1P}
+}
+
+@inproceedings{
+hshare,
+title={{HS}hare: Fast {LLM} Decoding by Hierarchical Key-Value Sharing},
+author={Huaijin Wu and Lianqiang Li and Hantao Huang and Tu Yi and Jihang Zhang and Minghui Yu and Junchi Yan},
+booktitle={The Thirteenth International Conference on Learning Representations},
+year={2025},
+url={https://openreview.net/forum?id=Tb5PY5vwp6}
+}
+
+@inproceedings{
+rkv,
+title={R-{KV}: Redundancy-aware {KV} Cache Compression for Reasoning Models},
+author={Zefan Cai and Wen Xiao and Hanshi Sun and Cheng Luo and Yikai Zhang and Ke Wan and Yucheng Li and Yeyang Zhou and Li-Wen Chang and Jiuxiang Gu and Zhen Dong and Anima Anandkumar and Abedelkadir Asi and Junjie Hu},
+booktitle={The Thirty-ninth Annual Conference on Neural Information Processing Systems},
+year={2025},
+url={https://openreview.net/forum?id=2jwAjomEDB}
+}
+
+@inproceedings{
+attnpredictor,
+title={Attention{P}redictor: Temporal Patterns Matter for {KV} Cache Compression},
+author={Qingyue Yang and Jie Wang and Xing Li and Zhihai Wang and Chen Chen and Lei Chen and Xianzhi Yu and Wulong Liu and Jianye HAO and Mingxuan Yuan and Bin Li},
+booktitle={The Thirty-ninth Annual Conference on Neural Information Processing Systems},
+year={2025},
+url={https://openreview.net/forum?id=Guar1tumDr}
+}
+
+@inproceedings{
+spargeattn,
+title={Sparge{A}ttention: Accurate and Training-free Sparse Attention Accelerating Any Model Inference},
+author={Jintao Zhang and Chendong Xiang and Haofeng Huang and Jia wei and Haocheng Xi and Jun Zhu and Jianfei Chen},
+booktitle={Forty-second International Conference on Machine Learning},
+year={2025},
+url={https://openreview.net/forum?id=74c3Wwk8Tc}
+}
+
+@inproceedings{
+andpro,
+title={Accurate {KV} Cache Eviction via Anchor Direction Projection for Efficient {LLM} Inference},
+author={Zijie Geng and Jie Wang and Ziqi Liu and Feng Ju and Yiming Li and Xing Li and Mingxuan Yuan and Jianye HAO and Defu Lian and Enhong Chen and Feng Wu},
+booktitle={The Thirty-ninth Annual Conference on Neural Information Processing Systems},
+year={2025},
+url={https://openreview.net/forum?id=Tdl89SZItB}
+}
+
+@inproceedings{
+moh,
+title={Mo{H}: Multi-Head Attention as Mixture-of-Head Attention},
+author={Peng Jin and Bo Zhu and Li Yuan and Shuicheng YAN},
+booktitle={Forty-second International Conference on Machine Learning},
+year={2025},
+url={https://openreview.net/forum?id=eYtgs9k75o}
+}
+
+@inproceedings{rmsnorm,
+ author = {Zhang, Biao and Sennrich, Rico},
+ booktitle = {Advances in Neural Information Processing Systems},
+ editor = {H. Wallach and H. Larochelle and A. Beygelzimer and F. d\textquotesingle Alch\'{e}-Buc and E. Fox and R. Garnett},
+ pages = {},
+ publisher = {Curran Associates, Inc.},
+ title = {Root Mean Square Layer Normalization},
+ url = {https://proceedings.neurips.cc/paper_files/paper/2019/file/1e8a19426224ca89e83cef47f1e7f53b-Paper.pdf},
+ volume = {32},
+ year = {2019}
+}
+
+@inproceedings{
+gqa,
+title={{GQA}: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints},
+author={Joshua Ainslie and James Lee-Thorp and Michiel de Jong and Yury Zemlyanskiy and Federico Lebron and Sumit Sanghai},
+booktitle={The 2023 Conference on Empirical Methods in Natural Language Processing},
+year={2023},
+url={https://openreview.net/forum?id=hmOwOZWzYE}
+}
+
+@inproceedings{triviaqa,
+    title = "{T}rivia{QA}: A Large Scale Distantly Supervised Challenge Dataset for Reading Comprehension",
+    author = "Joshi, Mandar  and
+      Choi, Eunsol  and
+      Weld, Daniel  and
+      Zettlemoyer, Luke",
+    editor = "Barzilay, Regina  and
+      Kan, Min-Yen",
+    booktitle = "Proceedings of the 55th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    month = jul,
+    year = "2017",
+    address = "Vancouver, Canada",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/P17-1147/",
+    doi = "10.18653/v1/P17-1147",
+    pages = "1601--1611",
+    abstract = "We present TriviaQA, a challenging reading comprehension dataset containing over 650K question-answer-evidence triples. TriviaQA includes 95K question-answer pairs authored by trivia enthusiasts and independently gathered evidence documents, six per question on average, that provide high quality distant supervision for answering the questions. We show that, in comparison to other recently introduced large-scale datasets, TriviaQA (1) has relatively complex, compositional questions, (2) has considerable syntactic and lexical variability between questions and corresponding answer-evidence sentences, and (3) requires more cross sentence reasoning to find answers. We also present two baseline algorithms: a feature-based classifier and a state-of-the-art neural network, that performs well on SQuAD reading comprehension. Neither approach comes close to human performance (23{\%} and 40{\%} vs. 80{\%}), suggesting that TriviaQA is a challenging testbed that is worth significant future study."
+}
+
+@inproceedings{popqa,
+    title = "When Not to Trust Language Models: Investigating Effectiveness of Parametric and Non-Parametric Memories",
+    author = "Mallen, Alex  and
+      Asai, Akari  and
+      Zhong, Victor  and
+      Das, Rajarshi  and
+      Khashabi, Daniel  and
+      Hajishirzi, Hannaneh",
+    editor = "Rogers, Anna  and
+      Boyd-Graber, Jordan  and
+      Okazaki, Naoaki",
+    booktitle = "Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    month = jul,
+    year = "2023",
+    address = "Toronto, Canada",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2023.acl-long.546/",
+    doi = "10.18653/v1/2023.acl-long.546",
+    pages = "9802--9822",
+    abstract = "Despite their impressive performance on diverse tasks, large language models (LMs) still struggle with tasks requiring rich world knowledge, implying the difficulty of encoding a wealth of world knowledge in their parameters. This paper aims to understand LMs' strengths and limitations in memorizing factual knowledge, by conducting large-scale knowledge probing experiments on two open-domain entity-centric QA datasets: PopQA, our new dataset with 14k questions about long-tail entities, and EntityQuestions, a widely used open-domain QA dataset. We find that LMs struggle with less popular factual knowledge, and that retrieval augmentation helps significantly in these cases. Scaling, on the other hand, mainly improves memorization of popular knowledge, and fails to appreciably improve memorization of factual knowledge in the tail. Based on those findings, we devise a new method for retrieval-augmentation that improves performance and reduces inference costs by only retrieving non-parametric memories when necessary."
+}
+
+@inproceedings{hotpotqa,
+    title = "{H}otpot{QA}: A Dataset for Diverse, Explainable Multi-hop Question Answering",
+    author = "Yang, Zhilin  and
+      Qi, Peng  and
+      Zhang, Saizheng  and
+      Bengio, Yoshua  and
+      Cohen, William  and
+      Salakhutdinov, Ruslan  and
+      Manning, Christopher D.",
+    editor = "Riloff, Ellen  and
+      Chiang, David  and
+      Hockenmaier, Julia  and
+      Tsujii, Jun{'}ichi",
+    booktitle = "Proceedings of the 2018 Conference on Empirical Methods in Natural Language Processing",
+    month = oct # "-" # nov,
+    year = "2018",
+    address = "Brussels, Belgium",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/D18-1259/",
+    doi = "10.18653/v1/D18-1259",
+    pages = "2369--2380",
+    abstract = "Existing question answering (QA) datasets fail to train QA systems to perform complex reasoning and provide explanations for answers. We introduce HotpotQA, a new dataset with 113k Wikipedia-based question-answer pairs with four key features: (1) the questions require finding and reasoning over multiple supporting documents to answer; (2) the questions are diverse and not constrained to any pre-existing knowledge bases or knowledge schemas; (3) we provide sentence-level supporting facts required for reasoning, allowing QA systems to reason with strong supervision and explain the predictions; (4) we offer a new type of factoid comparison questions to test QA systems' ability to extract relevant facts and perform necessary comparison. We show that HotpotQA is challenging for the latest QA systems, and the supporting facts enable models to improve performance and make explainable predictions."
+}
+
+@inproceedings{infinitebench,
+    title = "$\infty${B}ench: Extending Long Context Evaluation Beyond 100{K} Tokens",
+    author = "Zhang, Xinrong  and
+      Chen, Yingfa  and
+      Hu, Shengding  and
+      Xu, Zihang  and
+      Chen, Junhao  and
+      Hao, Moo  and
+      Han, Xu  and
+      Thai, Zhen  and
+      Wang, Shuo  and
+      Liu, Zhiyuan  and
+      Sun, Maosong",
+    editor = "Ku, Lun-Wei  and
+      Martins, Andre  and
+      Srikumar, Vivek",
+    booktitle = "Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    month = aug,
+    year = "2024",
+    address = "Bangkok, Thailand",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2024.acl-long.814/",
+    doi = "10.18653/v1/2024.acl-long.814",
+    pages = "15262--15277",
+    abstract = "Processing and reasoning over long contexts is crucial for many practical applications of Large Language Models (LLMs), such as document comprehension and agent construction. Despite recent strides in making LLMs process contexts with more than 100K tokens, there is currently a lack of a standardized benchmark to evaluate this long-context capability. Existing public benchmarks typically focus on contexts around 10K tokens, limiting the assessment and comparison of LLMs in processing longer contexts. In this paper, we propose , the first LLM benchmark featuring an average data length surpassing 100K tokens. comprises synthetic and realistic tasks spanning diverse domains in English and Chinese. The tasks in are designed to require an understanding of long dependencies in contexts and make simply retrieving a limited number of passages from contexts not sufficient for these tasks. Based on , we evaluate several state-of-the-art LLMs tailored for processing long contexts. The experimental results indicate that existing long-context LLMs still require significant advancements to process 100K+ contexts effectively. Furthermore, we present three intriguing analyses regarding the behavior of LLMs processing long context. Our code and data is released."
+}
+
+@inproceedings{
+lexsum,
+title={Multi-{L}ex{S}um: Real-world Summaries of Civil Rights Lawsuits at Multiple Granularities},
+author={Zejiang Shen and Kyle Lo and Lauren Yu and Nathan Dahlberg and Margo Schlanger and Doug Downey},
+booktitle={Thirty-sixth Conference on Neural Information Processing Systems Datasets and Benchmarks Track},
+year={2022},
+url={https://openreview.net/forum?id=z1d8fUiS8Cr}
+}
+
+@inproceedings{trec,
+    title = "Learning Question Classifiers",
+    author = "Li, Xin  and
+      Roth, Dan",
+    booktitle = "{COLING} 2002: The 19th International Conference on Computational Linguistics",
+    year = "2002",
+    url = "https://aclanthology.org/C02-1150/"
+}
+
+@inproceedings{banking,
+    title = "Efficient Intent Detection with Dual Sentence Encoders",
+    author = "Casanueva, I{\~n}igo  and
+      Tem{\v{c}}inas, Tadas  and
+      Gerz, Daniela  and
+      Henderson, Matthew  and
+      Vuli{\'c}, Ivan",
+    editor = "Wen, Tsung-Hsien  and
+      Celikyilmaz, Asli  and
+      Yu, Zhou  and
+      Papangelis, Alexandros  and
+      Eric, Mihail  and
+      Kumar, Anuj  and
+      Casanueva, I{\~n}igo  and
+      Shah, Rushin",
+    booktitle = "Proceedings of the 2nd Workshop on Natural Language Processing for Conversational AI",
+    month = jul,
+    year = "2020",
+    address = "Online",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2020.nlp4convai-1.5/",
+    doi = "10.18653/v1/2020.nlp4convai-1.5",
+    pages = "38--45",
+    abstract = "Building conversational systems in new domains and with added functionality requires resource-efficient models that work under low-data regimes (i.e., in few-shot setups). Motivated by these requirements, we introduce intent detection methods backed by pretrained dual sentence encoders such as USE and ConveRT. We demonstrate the usefulness and wide applicability of the proposed intent detectors, showing that: 1) they outperform intent detectors based on fine-tuning the full BERT-Large model or using BERT as a fixed black-box encoder on three diverse intent detection data sets; 2) the gains are especially pronounced in few-shot setups (i.e., with only 10 or 30 annotated examples per intent); 3) our intent detectors can be trained in a matter of minutes on a single CPU; and 4) they are stable across different hyperparameter settings. In hope of facilitating and democratizing research focused on intention detection, we release our code, as well as a new challenging single-domain intent detection dataset comprising 13,083 annotated examples over 77 intents."
+}
+
+@inproceedings{clinc,
+    title = "An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction",
+    author = "Larson, Stefan  and
+      Mahendran, Anish  and
+      Peper, Joseph J.  and
+      Clarke, Christopher  and
+      Lee, Andrew  and
+      Hill, Parker  and
+      Kummerfeld, Jonathan K.  and
+      Leach, Kevin  and
+      Laurenzano, Michael A.  and
+      Tang, Lingjia  and
+      Mars, Jason",
+    editor = "Inui, Kentaro  and
+      Jiang, Jing  and
+      Ng, Vincent  and
+      Wan, Xiaojun",
+    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP)",
+    month = nov,
+    year = "2019",
+    address = "Hong Kong, China",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/D19-1131/",
+    doi = "10.18653/v1/D19-1131",
+    pages = "1311--1316",
+    abstract = "Task-oriented dialog systems need to know when a query falls outside their range of supported intents, but current text classification corpora only define label sets that cover every example. We introduce a new dataset that includes queries that are out-of-scope{---}i.e., queries that do not fall into any of the system{'}s supported intents. This poses a new challenge because models cannot assume that every query at inference time belongs to a system-supported intent class. Our dataset also covers 150 intent classes over 10 domains, capturing the breadth that a production task-oriented agent must handle. We evaluate a range of benchmark classifiers on our dataset along with several different out-of-scope identification schemes. We find that while the classifiers perform well on in-scope intent classification, they struggle to identify out-of-scope queries. Our dataset and evaluation fill an important gap in the field, offering a way of more rigorously and realistically benchmarking text classification in task-driven dialog systems."
+}
+
+@inproceedings{
+longproc,
+title={Long{P}roc: Benchmarking Long-Context Language Models on Long Procedural Generation},
+author={Xi Ye and Fangcong Yin and Yinghui He and Joie Zhang and Howard Yen and Tianyu Gao and Greg Durrett and Danqi Chen},
+booktitle={Second Conference on Language Modeling},
+year={2025},
+url={https://openreview.net/forum?id=ruWC5LIMSo}
+}
+
+@inproceedings{
+sglang,
+title={{SGL}ang: Efficient Execution of Structured Language Model Programs},
+author={Lianmin Zheng and Liangsheng Yin and Zhiqiang Xie and Chuyue Sun and Jeff Huang and Cody Hao Yu and Shiyi Cao and Christos Kozyrakis and Ion Stoica and Joseph E. Gonzalez and Clark Barrett and Ying Sheng},
+booktitle={The Thirty-eighth Annual Conference on Neural Information Processing Systems},
+year={2024},
+url={https://openreview.net/forum?id=VqkAKQibpq}
+}
+
+@inproceedings{
+scissorhands,
+title={Scissorhands: Exploiting the Persistence of Importance Hypothesis for {LLM} {KV} Cache Compression at Test Time},
+author={Zichang Liu and Aditya Desai and Fangshuo Liao and Weitao Wang and Victor Xie and Zhaozhuo Xu and Anastasios Kyrillidis and Anshumali Shrivastava},
+booktitle={Thirty-seventh Conference on Neural Information Processing Systems},
+year={2023},
+url={https://openreview.net/forum?id=JZfg6wGi6g}
+}
+
+@inproceedings{transformers,
+    title = "Transformers: State-of-the-Art Natural Language Processing",
+    author = "Wolf, Thomas  and
+      Debut, Lysandre  and
+      Sanh, Victor  and
+      Chaumond, Julien  and
+      Delangue, Clement  and
+      Moi, Anthony  and
+      Cistac, Pierric  and
+      Rault, Tim  and
+      Louf, Remi  and
+      Funtowicz, Morgan  and
+      Davison, Joe  and
+      Shleifer, Sam  and
+      von Platen, Patrick  and
+      Ma, Clara  and
+      Jernite, Yacine  and
+      Plu, Julien  and
+      Xu, Canwen  and
+      Le Scao, Teven  and
+      Gugger, Sylvain  and
+      Drame, Mariama  and
+      Lhoest, Quentin  and
+      Rush, Alexander",
+    editor = "Liu, Qun  and
+      Schlangen, David",
+    booktitle = "Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing: System Demonstrations",
+    month = oct,
+    year = "2020",
+    address = "Online",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2020.emnlp-demos.6/",
+    doi = "10.18653/v1/2020.emnlp-demos.6",
+    pages = "38--45",
+    abstract = "Recent progress in natural language processing has been driven by advances in both model architecture and model pretraining. Transformer architectures have facilitated building higher-capacity models and pretraining has made it possible to effectively utilize this capacity for a wide variety of tasks. Transformers is an open-source library with the goal of opening up these advances to the wider machine learning community. The library consists of carefully engineered state-of-the art Transformer architectures under a unified API. Backing this library is a curated collection of pretrained models made by and available for the community. Transformers is designed to be extensible by researchers, simple for practitioners, and fast and robust in industrial deployments. The library is available at \url{https://github.com/huggingface/transformers}."
+}
+
+// [article]
+
+@article{pqcache,
+author = {Zhang, Hailin and Ji, Xiaodong and Chen, Yilin and Fu, Fangcheng and Miao, Xupeng and Nie, Xiaonan and Chen, Weipeng and Cui, Bin},
+title = {{PQCache}: Product Quantization-based {KVCache} for Long Context {LLM} Inference},
+year = {2025},
+issue_date = {June 2025},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {3},
+number = {3},
+url = {https://doi.org/10.1145/3725338},
+doi = {10.1145/3725338},
+abstract = {As the field of Large Language Models (LLMs) continues to evolve, the context length in inference is steadily growing. Key-Value Cache (KVCache), the intermediate representations of tokens within LLM inference, has now become the primary memory bottleneck due to limited GPU memory. Current methods selectively determine suitable keys and values for self-attention computation in LLMs to address the issue. However, they either fall short in maintaining model quality or result in high serving latency. Drawing inspiration from advanced embedding retrieval techniques prevalent in the data management community, we consider the storage and retrieval of KVCache as a typical embedding retrieval problem. We propose PQCache, which employs Product Quantization (PQ) to manage KVCache, maintaining model quality while ensuring low serving latency. During the prefilling phase, we apply PQ to tokens' keys for each LLM layer and head. During the autoregressive decoding phase, we use PQ codes and centroids to approximately identify important preceding tokens, then fetch the corresponding key-value pairs for self-attention computation. Through meticulous design of overlapping and caching, we minimize any additional computation and communication overhead during both phases. Extensive experiments demonstrate that PQCache achieves both effectiveness and efficiency, with 4.60\% score improvement over existing methods on InfiniteBench and low system latency in both prefilling and decoding.},
+journal = {Proc. ACM Manag. Data},
+month = jun,
+articleno = {201},
+numpages = {30},
+keywords = {Bin Cui, Fangcheng Fu, Hailin Zhang, Weipeng Chen, Xiaodong Ji, Xiaonan Nie, Xupeng Miao, Yilin Chen}
+}
+
+@article{
+thestack,
+title={The {S}tack: 3 {TB} of permissively licensed source code},
+author={Denis Kocetkov and Raymond Li and Loubna Ben allal and Jia LI and Chenghao Mou and Yacine Jernite and Margaret Mitchell and Carlos Mu{\~n}oz Ferrandis and Sean Hughes and Thomas Wolf and Dzmitry Bahdanau and Leandro Von Werra and Harm de Vries},
+journal={Transactions on Machine Learning Research},
+issn={2835-8856},
+year={2023},
+url={https://openreview.net/forum?id=pxpbTdUEpD},
+note={}
+}
+
+@article{finch,
+    title = "{FINCH}: Prompt-guided Key-Value Cache Compression for Large Language Models",
+    author = "Corallo, Giulio  and
+      Papotti, Paolo",
+    journal = "Transactions of the Association for Computational Linguistics",
+    volume = "12",
+    year = "2024",
+    address = "Cambridge, MA",
+    publisher = "MIT Press",
+    url = "https://aclanthology.org/2024.tacl-1.83/",
+    doi = "10.1162/tacl_a_00716",
+    pages = "1517--1532",
+    abstract = "Recent large language model applications, such as Retrieval-Augmented Generation and chatbots, have led to an increased need to process longer input contexts. However, this requirement is hampered by inherent limitations. Architecturally, models are constrained by a context window defined during training. Additionally, processing extensive texts requires substantial GPU memory. We propose a novel approach, Finch, to compress the input context by leveraging the pre-trained model weights of the self-attention. Given a prompt and a long text, Finch iteratively identifies the most relevant Key (K) and Value (V) pairs over chunks of the text conditioned on the prompt. Only such pairs are stored in the KV cache, which, within the space constrained by the context window, ultimately contains a compressed version of the long text. Our proposal enables models to consume large inputs even with high compression (up to 93x) while preserving semantic integrity without the need for fine-tuning."
+}
+
+@article{rope,
+title = {Ro{F}ormer: Enhanced transformer with Rotary Position Embedding},
+journal = {Neurocomputing},
+volume = {568},
+pages = {127063},
+year = {2024},
+issn = {0925-2312},
+doi = {https://doi.org/10.1016/j.neucom.2023.127063},
+url = {https://www.sciencedirect.com/science/article/pii/S0925231223011864},
+author = {Jianlin Su and Murtadha Ahmed and Yu Lu and Shengfeng Pan and Wen Bo and Yunfeng Liu},
+keywords = {Pre-trained language models, Position information encoding, Pre-training, Natural language processing},
+abstract = {Position encoding has recently been shown to be effective in transformer architecture. It enables valuable supervision for dependency modeling between elements at different positions of the sequence. In this paper, we first investigate various methods to integrate positional information into the learning process of transformer-based language models. Then, we propose a novel method named Rotary Position Embedding (RoPE) to effectively leverage the positional information. Specifically, the proposed RoPE encodes the absolute position with a rotation matrix and meanwhile incorporates the explicit relative position dependency in the self-attention formulation. Notably, RoPE enables valuable properties, including the flexibility of sequence length, decaying inter-token dependency with increasing relative distances, and the capability of equipping linear self-attention with relative position encoding. Finally, we evaluate the enhanced transformer with rotary position embedding, also called RoFormer, on various long text classification benchmark datasets. Our experiments show that it consistently overcomes its alternatives. Furthermore, we provide a theoretical analysis to explain some experimental results. RoFormer is already integrated into Huggingface: https://huggingface.co/docs/transformers/model_doc/roformer.}
+}
+
+@article{nq,
+    title = "Natural {Q}uestions: A Benchmark for Question Answering Research",
+    author = "Kwiatkowski, Tom  and
+      Palomaki, Jennimaria  and
+      Redfield, Olivia  and
+      Collins, Michael  and
+      Parikh, Ankur  and
+      Alberti, Chris  and
+      Epstein, Danielle  and
+      Polosukhin, Illia  and
+      Devlin, Jacob  and
+      Lee, Kenton  and
+      Toutanova, Kristina  and
+      Jones, Llion  and
+      Kelcey, Matthew  and
+      Chang, Ming-Wei  and
+      Dai, Andrew M.  and
+      Uszkoreit, Jakob  and
+      Le, Quoc  and
+      Petrov, Slav",
+    editor = "Lee, Lillian  and
+      Johnson, Mark  and
+      Roark, Brian  and
+      Nenkova, Ani",
+    journal = "Transactions of the Association for Computational Linguistics",
+    volume = "7",
+    year = "2019",
+    address = "Cambridge, MA",
+    publisher = "MIT Press",
+    url = "https://aclanthology.org/Q19-1026/",
+    doi = "10.1162/tacl_a_00276",
+    pages = "452--466",
+    abstract = "We present the Natural Questions corpus, a question answering data set. Questions consist of real anonymized, aggregated queries issued to the Google search engine. An annotator is presented with a question along with a Wikipedia page from the top 5 search results, and annotates a long answer (typically a paragraph) and a short answer (one or more entities) if present on the page, or marks null if no long/short answer is present. The public release consists of 307,373 training examples with single annotations; 7,830 examples with 5-way annotations for development data; and a further 7,842 examples with 5-way annotated sequestered as test data. We present experiments validating quality of the data. We also describe analysis of 25-way annotations on 302 examples, giving insights into human variability on the annotation task. We introduce robust metrics for the purposes of evaluating question answering systems; demonstrate high human upper bounds on these metrics; and establish baseline results using competitive methods drawn from related literature."
+}
+
+@article{narrativeqa,
+    title = "The {N}arrative{QA} Reading Comprehension Challenge",
+    author = "Ko{\v{c}}isk{\'y}, Tom{\'a}{\v{s}}  and
+      Schwarz, Jonathan  and
+      Blunsom, Phil  and
+      Dyer, Chris  and
+      Hermann, Karl Moritz  and
+      Melis, G{\'a}bor  and
+      Grefenstette, Edward",
+    editor = "Lee, Lillian  and
+      Johnson, Mark  and
+      Toutanova, Kristina  and
+      Roark, Brian",
+    journal = "Transactions of the Association for Computational Linguistics",
+    volume = "6",
+    year = "2018",
+    address = "Cambridge, MA",
+    publisher = "MIT Press",
+    url = "https://aclanthology.org/Q18-1023/",
+    doi = "10.1162/tacl_a_00023",
+    pages = "317--328",
+    abstract = "Reading comprehension (RC){---}in contrast to information retrieval{---}requires integrating information and reasoning about events, entities, and their relations across a full document. Question answering is conventionally used to assess RC ability, in both artificial agents and children learning to read. However, existing RC datasets and tasks are dominated by questions that can be solved by selecting answers using superficial information (e.g., local context similarity or global term frequency); they thus fail to test for the essential integrative aspect of RC. To encourage progress on deeper comprehension of language, we present a new dataset and set of tasks in which the reader must answer questions about stories by reading entire books or movie scripts. These tasks are designed so that successfully answering their questions requires understanding the underlying narrative rather than relying on shallow pattern matching or salience. We show that although humans solve the tasks easily, standard RC models struggle on the tasks presented here. We provide an analysis of the dataset and the challenges it presents."
+}
+
+// [misc]
+
+@misc{nlu,
+      title={Benchmarking Natural Language Understanding Services for building Conversational Agents}, 
+      author={Xingkun Liu and Arash Eshghi and Pawel Swietojanski and Verena Rieser},
+      year={2019},
+      eprint={1903.05566},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/1903.05566}, 
+}
+
+@misc{msmacro,
+      title={{MS} {MARCO}: A Human Generated MAchine Reading COmprehension Dataset}, 
+      author={Payal Bajaj and Daniel Campos and Nick Craswell and Li Deng and Jianfeng Gao and Xiaodong Liu and Rangan Majumder and Andrew McNamara and Bhaskar Mitra and Tri Nguyen and Mir Rosenberg and Xia Song and Alina Stoica and Saurabh Tiwary and Tong Wang},
+      year={2018},
+      eprint={1611.09268},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/1611.09268}, 
+}
+
+@misc{nemotronmath,
+      title={Nemotron-{M}ath: Efficient Long-Context Distillation of Mathematical Reasoning from Multi-Mode Supervision}, 
+      author={Wei Du and Shubham Toshniwal and Branislav Kisacanin and Sadegh Mahdavi and Ivan Moshkov and George Armstrong and Stephen Ge and Edgar Minasyan and Feng Chen and Igor Gitman},
+      year={2025},
+      eprint={2512.15489},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2512.15489}, 
+}
+
+@misc{aime25,
+      title={math-ai/aime25 · Datasets at Hugging Face}, 
+      author={Zhang, Yifan and Math-AI, Team},
+      year={2025},
+      url={https://huggingface.co/datasets/math-ai/aime25},
+}
+
+@misc{
+attngate,
+title={In-context {KV}-Cache Eviction for {LLM}s via Attention-Gate},
+author={Zihao Zeng and Bokai Lin and TianQi Hou and Hao Zhang and Zhijie Deng},
+year={2025},
+url={https://openreview.net/forum?id=tvQNysCP7C}
+}
+
+@misc{
+locret,
+title={Locret: Enhancing Eviction in Long-Context {LLM} Inference with Trained Retaining Heads},
+author={Yuxiang Huang and Binhang Yuan and Xu Han and Chaojun Xiao and Zhiyuan Liu},
+year={2025},
+url={https://openreview.net/forum?id=CkCFoN3j4s}
+}
+
+@misc{
+kvmerger,
+title={Model Tells You Where to Merge: Adaptive {KV} Cache Merging for {LLM}s on Long-Context Tasks},
+author={Zheng Wang and Boxiao Jin and Yuming Chang and Zhongzhi Yu and Minjia Zhang},
+year={2025},
+url={https://openreview.net/forum?id=Q5VlpYRxGF}
+}
+
+@misc{prulong,
+      title={Cache Me If You Can: How Many {KV}s Do You Need for Effective Long-Context {LM}s?}, 
+      author={Adithya Bhaskar and Alexander Wettig and Tianyu Gao and Yihe Dong and Danqi Chen},
+      year={2025},
+      eprint={2506.17121},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2506.17121}, 
+}
+
+@misc{
+xkv,
+title={x{KV}: Cross-Layer {KV}-Cache Compression via Aligned Singular Vector Extraction},
+author={Chi-Chih Chang and Wei-Cheng Lin and Chien-Yu Lin and Yash Akhauri and Hung-Yueh Chiang and Xilai Dai and Huiqiang Jiang and Yucheng Li and Kai-Chiang Wu and Luis Ceze and Mohamed S. Abdelfattah},
+year={2026},
+url={https://openreview.net/forum?id=CSooB1sE2m}
+}
+
+@misc{
+seerattn,
+title={Seer{A}ttention: Learning Intrinsic Sparse Attention in Your {LLM}s},
+author={Yizhao Gao and Zhichen Zeng and DaYou Du and Shijie Cao and Hayden Kwok-Hay So and Ting Cao and Fan Yang and Mao Yang},
+year={2025},
+url={https://openreview.net/forum?id=HmwneoGoy9}
+}
+
+@misc{llama3,
+      title={The {L}lama 3 Herd of Models}, 
+      author={Aaron Grattafiori and Abhimanyu Dubey and Abhinav Jauhri and Abhinav Pandey and Abhishek Kadian and Ahmad Al-Dahle and Aiesha Letman and Akhil Mathur and Alan Schelten and Alex Vaughan and Amy Yang and Angela Fan and Anirudh Goyal and Anthony Hartshorn and Aobo Yang and Archi Mitra and Archie Sravankumar and Artem Korenev and Arthur Hinsvark and Arun Rao and Aston Zhang and Aurelien Rodriguez and Austen Gregerson and Ava Spataru and Baptiste Roziere and Bethany Biron and Binh Tang and Bobbie Chern and Charlotte Caucheteux and Chaya Nayak and Chloe Bi and Chris Marra and Chris McConnell and Christian Keller and Christophe Touret and Chunyang Wu and Corinne Wong and Cristian Canton Ferrer and Cyrus Nikolaidis and Damien Allonsius and Daniel Song and Danielle Pintz and Danny Livshits and Danny Wyatt and David Esiobu and Dhruv Choudhary and Dhruv Mahajan and Diego Garcia-Olano and Diego Perino and Dieuwke Hupkes and Egor Lakomkin and Ehab AlBadawy and Elina Lobanova and Emily Dinan and Eric Michael Smith and Filip Radenovic and Francisco Guzmán and Frank Zhang and Gabriel Synnaeve and Gabrielle Lee and Georgia Lewis Anderson and Govind Thattai and Graeme Nail and Gregoire Mialon and Guan Pang and Guillem Cucurell and Hailey Nguyen and Hannah Korevaar and Hu Xu and Hugo Touvron and Iliyan Zarov and Imanol Arrieta Ibarra and Isabel Kloumann and Ishan Misra and Ivan Evtimov and Jack Zhang and Jade Copet and Jaewon Lee and Jan Geffert and Jana Vranes and Jason Park and Jay Mahadeokar and Jeet Shah and Jelmer van der Linde and Jennifer Billock and Jenny Hong and Jenya Lee and Jeremy Fu and Jianfeng Chi and Jianyu Huang and Jiawen Liu and Jie Wang and Jiecao Yu and Joanna Bitton and Joe Spisak and Jongsoo Park and Joseph Rocca and Joshua Johnstun and Joshua Saxe and Junteng Jia and Kalyan Vasuden Alwala and Karthik Prasad and Kartikeya Upasani and Kate Plawiak and Ke Li and Kenneth Heafield and Kevin Stone and Khalid El-Arini and Krithika Iyer and Kshitiz Malik and Kuenley Chiu and Kunal Bhalla and Kushal Lakhotia and Lauren Rantala-Yeary and Laurens van der Maaten and Lawrence Chen and Liang Tan and Liz Jenkins and Louis Martin and Lovish Madaan and Lubo Malo and Lukas Blecher and Lukas Landzaat and Luke de Oliveira and Madeline Muzzi and Mahesh Pasupuleti and Mannat Singh and Manohar Paluri and Marcin Kardas and Maria Tsimpoukelli and Mathew Oldham and Mathieu Rita and Maya Pavlova and Melanie Kambadur and Mike Lewis and Min Si and Mitesh Kumar Singh and Mona Hassan and Naman Goyal and Narjes Torabi and Nikolay Bashlykov and Nikolay Bogoychev and Niladri Chatterji and Ning Zhang and Olivier Duchenne and Onur Çelebi and Patrick Alrassy and Pengchuan Zhang and Pengwei Li and Petar Vasic and Peter Weng and Prajjwal Bhargava and Pratik Dubal and Praveen Krishnan and Punit Singh Koura and Puxin Xu and Qing He and Qingxiao Dong and Ragavan Srinivasan and Raj Ganapathy and Ramon Calderer and Ricardo Silveira Cabral and Robert Stojnic and Roberta Raileanu and Rohan Maheswari and Rohit Girdhar and Rohit Patel and Romain Sauvestre and Ronnie Polidoro and Roshan Sumbaly and Ross Taylor and Ruan Silva and Rui Hou and Rui Wang and Saghar Hosseini and Sahana Chennabasappa and Sanjay Singh and Sean Bell and Seohyun Sonia Kim and Sergey Edunov and Shaoliang Nie and Sharan Narang and Sharath Raparthy and Sheng Shen and Shengye Wan and Shruti Bhosale and Shun Zhang and Simon Vandenhende and Soumya Batra and Spencer Whitman and Sten Sootla and Stephane Collot and Suchin Gururangan and Sydney Borodinsky and Tamar Herman and Tara Fowler and Tarek Sheasha and Thomas Georgiou and Thomas Scialom and Tobias Speckbacher and Todor Mihaylov and Tong Xiao and Ujjwal Karn and Vedanuj Goswami and Vibhor Gupta and Vignesh Ramanathan and Viktor Kerkez and Vincent Gonguet and Virginie Do and Vish Vogeti and Vítor Albiero and Vladan Petrovic and Weiwei Chu and Wenhan Xiong and Wenyin Fu and Whitney Meers and Xavier Martinet and Xiaodong Wang and Xiaofang Wang and Xiaoqing Ellen Tan and Xide Xia and Xinfeng Xie and Xuchao Jia and Xuewei Wang and Yaelle Goldschlag and Yashesh Gaur and Yasmine Babaei and Yi Wen and Yiwen Song and Yuchen Zhang and Yue Li and Yuning Mao and Zacharie Delpierre Coudert and Zheng Yan and Zhengxing Chen and Zoe Papakipos and Aaditya Singh and Aayushi Srivastava and Abha Jain and Adam Kelsey and Adam Shajnfeld and Adithya Gangidi and Adolfo Victoria and Ahuva Goldstand and Ajay Menon and Ajay Sharma and Alex Boesenberg and Alexei Baevski and Allie Feinstein and Amanda Kallet and Amit Sangani and Amos Teo and Anam Yunus and Andrei Lupu and Andres Alvarado and Andrew Caples and Andrew Gu and Andrew Ho and Andrew Poulton and Andrew Ryan and Ankit Ramchandani and Annie Dong and Annie Franco and Anuj Goyal and Aparajita Saraf and Arkabandhu Chowdhury and Ashley Gabriel and Ashwin Bharambe and Assaf Eisenman and Azadeh Yazdan and Beau James and Ben Maurer and Benjamin Leonhardi and Bernie Huang and Beth Loyd and Beto De Paola and Bhargavi Paranjape and Bing Liu and Bo Wu and Boyu Ni and Braden Hancock and Bram Wasti and Brandon Spence and Brani Stojkovic and Brian Gamido and Britt Montalvo and Carl Parker and Carly Burton and Catalina Mejia and Ce Liu and Changhan Wang and Changkyu Kim and Chao Zhou and Chester Hu and Ching-Hsiang Chu and Chris Cai and Chris Tindal and Christoph Feichtenhofer and Cynthia Gao and Damon Civin and Dana Beaty and Daniel Kreymer and Daniel Li and David Adkins and David Xu and Davide Testuggine and Delia David and Devi Parikh and Diana Liskovich and Didem Foss and Dingkang Wang and Duc Le and Dustin Holland and Edward Dowling and Eissa Jamil and Elaine Montgomery and Eleonora Presani and Emily Hahn and Emily Wood and Eric-Tuan Le and Erik Brinkman and Esteban Arcaute and Evan Dunbar and Evan Smothers and Fei Sun and Felix Kreuk and Feng Tian and Filippos Kokkinos and Firat Ozgenel and Francesco Caggioni and Frank Kanayet and Frank Seide and Gabriela Medina Florez and Gabriella Schwarz and Gada Badeer and Georgia Swee and Gil Halpern and Grant Herman and Grigory Sizov and Guangyi and Zhang and Guna Lakshminarayanan and Hakan Inan and Hamid Shojanazeri and Han Zou and Hannah Wang and Hanwen Zha and Haroun Habeeb and Harrison Rudolph and Helen Suk and Henry Aspegren and Hunter Goldman and Hongyuan Zhan and Ibrahim Damlaj and Igor Molybog and Igor Tufanov and Ilias Leontiadis and Irina-Elena Veliche and Itai Gat and Jake Weissman and James Geboski and James Kohli and Janice Lam and Japhet Asher and Jean-Baptiste Gaya and Jeff Marcus and Jeff Tang and Jennifer Chan and Jenny Zhen and Jeremy Reizenstein and Jeremy Teboul and Jessica Zhong and Jian Jin and Jingyi Yang and Joe Cummings and Jon Carvill and Jon Shepard and Jonathan McPhie and Jonathan Torres and Josh Ginsburg and Junjie Wang and Kai Wu and Kam Hou U and Karan Saxena and Kartikay Khandelwal and Katayoun Zand and Kathy Matosich and Kaushik Veeraraghavan and Kelly Michelena and Keqian Li and Kiran Jagadeesh and Kun Huang and Kunal Chawla and Kyle Huang and Lailin Chen and Lakshya Garg and Lavender A and Leandro Silva and Lee Bell and Lei Zhang and Liangpeng Guo and Licheng Yu and Liron Moshkovich and Luca Wehrstedt and Madian Khabsa and Manav Avalani and Manish Bhatt and Martynas Mankus and Matan Hasson and Matthew Lennie and Matthias Reso and Maxim Groshev and Maxim Naumov and Maya Lathi and Meghan Keneally and Miao Liu and Michael L. Seltzer and Michal Valko and Michelle Restrepo and Mihir Patel and Mik Vyatskov and Mikayel Samvelyan and Mike Clark and Mike Macey and Mike Wang and Miquel Jubert Hermoso and Mo Metanat and Mohammad Rastegari and Munish Bansal and Nandhini Santhanam and Natascha Parks and Natasha White and Navyata Bawa and Nayan Singhal and Nick Egebo and Nicolas Usunier and Nikhil Mehta and Nikolay Pavlovich Laptev and Ning Dong and Norman Cheng and Oleg Chernoguz and Olivia Hart and Omkar Salpekar and Ozlem Kalinli and Parkin Kent and Parth Parekh and Paul Saab and Pavan Balaji and Pedro Rittner and Philip Bontrager and Pierre Roux and Piotr Dollar and Polina Zvyagina and Prashant Ratanchandani and Pritish Yuvraj and Qian Liang and Rachad Alao and Rachel Rodriguez and Rafi Ayub and Raghotham Murthy and Raghu Nayani and Rahul Mitra and Rangaprabhu Parthasarathy and Raymond Li and Rebekkah Hogan and Robin Battey and Rocky Wang and Russ Howes and Ruty Rinott and Sachin Mehta and Sachin Siby and Sai Jayesh Bondu and Samyak Datta and Sara Chugh and Sara Hunt and Sargun Dhillon and Sasha Sidorov and Satadru Pan and Saurabh Mahajan and Saurabh Verma and Seiji Yamamoto and Sharadh Ramaswamy and Shaun Lindsay and Shaun Lindsay and Sheng Feng and Shenghao Lin and Shengxin Cindy Zha and Shishir Patil and Shiva Shankar and Shuqiang Zhang and Shuqiang Zhang and Sinong Wang and Sneha Agarwal and Soji Sajuyigbe and Soumith Chintala and Stephanie Max and Stephen Chen and Steve Kehoe and Steve Satterfield and Sudarshan Govindaprasad and Sumit Gupta and Summer Deng and Sungmin Cho and Sunny Virk and Suraj Subramanian and Sy Choudhury and Sydney Goldman and Tal Remez and Tamar Glaser and Tamara Best and Thilo Koehler and Thomas Robinson and Tianhe Li and Tianjun Zhang and Tim Matthews and Timothy Chou and Tzook Shaked and Varun Vontimitta and Victoria Ajayi and Victoria Montanez and Vijai Mohan and Vinay Satish Kumar and Vishal Mangla and Vlad Ionescu and Vlad Poenaru and Vlad Tiberiu Mihailescu and Vladimir Ivanov and Wei Li and Wenchen Wang and Wenwen Jiang and Wes Bouaziz and Will Constable and Xiaocheng Tang and Xiaojian Wu and Xiaolan Wang and Xilun Wu and Xinbo Gao and Yaniv Kleinman and Yanjun Chen and Ye Hu and Ye Jia and Ye Qi and Yenda Li and Yilin Zhang and Ying Zhang and Yossi Adi and Youngjin Nam and Yu and Wang and Yu Zhao and Yuchen Hao and Yundi Qian and Yunlu Li and Yuzi He and Zach Rait and Zachary DeVito and Zef Rosnbrick and Zhaoduo Wen and Zhenyu Yang and Zhiwei Zhao and Zhiyu Ma},
+      year={2024},
+      eprint={2407.21783},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2407.21783}, 
+}
+
+@misc{qwen3,
+      title={Qwen3 Technical Report}, 
+      author={An Yang and Anfeng Li and Baosong Yang and Beichen Zhang and Binyuan Hui and Bo Zheng and Bowen Yu and Chang Gao and Chengen Huang and Chenxu Lv and Chujie Zheng and Dayiheng Liu and Fan Zhou and Fei Huang and Feng Hu and Hao Ge and Haoran Wei and Huan Lin and Jialong Tang and Jian Yang and Jianhong Tu and Jianwei Zhang and Jianxin Yang and Jiaxi Yang and Jing Zhou and Jingren Zhou and Junyang Lin and Kai Dang and Keqin Bao and Kexin Yang and Le Yu and Lianghao Deng and Mei Li and Mingfeng Xue and Mingze Li and Pei Zhang and Peng Wang and Qin Zhu and Rui Men and Ruize Gao and Shixuan Liu and Shuang Luo and Tianhao Li and Tianyi Tang and Wenbiao Yin and Xingzhang Ren and Xinyu Wang and Xinyu Zhang and Xuancheng Ren and Yang Fan and Yang Su and Yichang Zhang and Yinger Zhang and Yu Wan and Yuqiong Liu and Zekun Wang and Zeyu Cui and Zhenru Zhang and Zhipeng Zhou and Zihan Qiu},
+      year={2025},
+      eprint={2505.09388},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2505.09388}, 
+}
+
+@misc{
+qada,
+title={Unveiling Simplicities of Attention: Adaptive Long-Context Head Identification},
+author={Charles Arnal and Konstantin Donhauser and Mohammad Pezeshki and Vivien Cabannes and David Lopez-Paz and Kartik Ahuja},
+year={2026},
+url={https://openreview.net/forum?id=JgB14AVjGH}
+}
+
+@misc{
+expectedattn,
+title={Expected {A}ttention: {KV} Cache Compression by Estimating Attention From Future Queries Distribution},
+author={Alessio Devoto and Maximilian Jeblick and Simon J{\'e}gou},
+year={2026},
+url={https://openreview.net/forum?id=VmojW15eRc}
+}
+
+@misc{qfilters,
+      title={Q-{F}ilters: Leveraging {QK} Geometry for Efficient {KV} Cache Compression}, 
+      author={Nathan Godey and Alessio Devoto and Yu Zhao and Simone Scardapane and Pasquale Minervini and Éric de la Clergerie and Benoît Sagot},
+      year={2025},
+      eprint={2503.02812},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2503.02812}, 
+}
+
+@misc{retroinfer,
+      title={Retro{I}nfer: A Vector Storage Engine for Scalable Long-Context {LLM} Inference}, 
+      author={Yaoqi Chen and Jinkai Zhang and Baotong Lu and Qianxi Zhang and Chengruidong Zhang and Jing Liu and Jingjia Luo and Di Liu and Huiqiang Jiang and Qi Chen and Bailu Ding and Xiao Yan and Jiawei Jiang and Chen Chen and Mingxing Zhang and Cheng Li and Yuqing Yang and Fan Yang and Mao Yang},
+      year={2026},
+      eprint={2505.02922},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      doi={https://doi.org/10.14778/3796195.3796212},
+      url={https://arxiv.org/abs/2505.02922}, 
+}
+
+@misc{deepseekv32,
+      title={Deep{S}eek-{V}3.2: Pushing the Frontier of Open Large Language Models}, 
+      author={DeepSeek-AI and Aixin Liu and Aoxue Mei and Bangcai Lin and Bing Xue and Bingxuan Wang and Bingzheng Xu and Bochao Wu and Bowei Zhang and Chaofan Lin and Chen Dong and Chengda Lu and Chenggang Zhao and Chengqi Deng and Chenhao Xu and Chong Ruan and Damai Dai and Daya Guo and Dejian Yang and Deli Chen and Erhang Li and Fangqi Zhou and Fangyun Lin and Fucong Dai and Guangbo Hao and Guanting Chen and Guowei Li and H. Zhang and Hanwei Xu and Hao Li and Haofen Liang and Haoran Wei and Haowei Zhang and Haowen Luo and Haozhe Ji and Honghui Ding and Hongxuan Tang and Huanqi Cao and Huazuo Gao and Hui Qu and Hui Zeng and Jialiang Huang and Jiashi Li and Jiaxin Xu and Jiewen Hu and Jingchang Chen and Jingting Xiang and Jingyang Yuan and Jingyuan Cheng and Jinhua Zhu and Jun Ran and Junguang Jiang and Junjie Qiu and Junlong Li and Junxiao Song and Kai Dong and Kaige Gao and Kang Guan and Kexin Huang and Kexing Zhou and Kezhao Huang and Kuai Yu and Lean Wang and Lecong Zhang and Lei Wang and Liang Zhao and Liangsheng Yin and Lihua Guo and Lingxiao Luo and Linwang Ma and Litong Wang and Liyue Zhang and M. S. Di and M. Y Xu and Mingchuan Zhang and Minghua Zhang and Minghui Tang and Mingxu Zhou and Panpan Huang and Peixin Cong and Peiyi Wang and Qiancheng Wang and Qihao Zhu and Qingyang Li and Qinyu Chen and Qiushi Du and Ruiling Xu and Ruiqi Ge and Ruisong Zhang and Ruizhe Pan and Runji Wang and Runqiu Yin and Runxin Xu and Ruomeng Shen and Ruoyu Zhang and S. H. Liu and Shanghao Lu and Shangyan Zhou and Shanhuang Chen and Shaofei Cai and Shaoyuan Chen and Shengding Hu and Shengyu Liu and Shiqiang Hu and Shirong Ma and Shiyu Wang and Shuiping Yu and Shunfeng Zhou and Shuting Pan and Songyang Zhou and Tao Ni and Tao Yun and Tian Pei and Tian Ye and Tianyuan Yue and Wangding Zeng and Wen Liu and Wenfeng Liang and Wenjie Pang and Wenjing Luo and Wenjun Gao and Wentao Zhang and Xi Gao and Xiangwen Wang and Xiao Bi and Xiaodong Liu and Xiaohan Wang and Xiaokang Chen and Xiaokang Zhang and Xiaotao Nie and Xin Cheng and Xin Liu and Xin Xie and Xingchao Liu and Xingkai Yu and Xingyou Li and Xinyu Yang and Xinyuan Li and Xu Chen and Xuecheng Su and Xuehai Pan and Xuheng Lin and Xuwei Fu and Y. Q. Wang and Yang Zhang and Yanhong Xu and Yanru Ma and Yao Li and Yao Li and Yao Zhao and Yaofeng Sun and Yaohui Wang and Yi Qian and Yi Yu and Yichao Zhang and Yifan Ding and Yifan Shi and Yiliang Xiong and Ying He and Ying Zhou and Yinmin Zhong and Yishi Piao and Yisong Wang and Yixiao Chen and Yixuan Tan and Yixuan Wei and Yiyang Ma and Yiyuan Liu and Yonglun Yang and Yongqiang Guo and Yongtong Wu and Yu Wu and Yuan Cheng and Yuan Ou and Yuanfan Xu and Yuduan Wang and Yue Gong and Yuhan Wu and Yuheng Zou and Yukun Li and Yunfan Xiong and Yuxiang Luo and Yuxiang You and Yuxuan Liu and Yuyang Zhou and Z. F. Wu and Z. Z. Ren and Zehua Zhao and Zehui Ren and Zhangli Sha and Zhe Fu and Zhean Xu and Zhenda Xie and Zhengyan Zhang and Zhewen Hao and Zhibin Gou and Zhicheng Ma and Zhigang Yan and Zhihong Shao and Zhixian Huang and Zhiyu Wu and Zhuoshu Li and Zhuping Zhang and Zian Xu and Zihao Wang and Zihui Gu and Zijia Zhu and Zilin Li and Zipeng Zhang and Ziwei Xie and Ziyi Gao and Zizheng Pan and Zongqing Yao and Bei Feng and Hui Li and J. L. Cai and Jiaqi Ni and Lei Xu and Meng Li and Ning Tian and R. J. Chen and R. L. Jin and S. S. Li and Shuang Zhou and Tianyu Sun and X. Q. Li and Xiangyue Jin and Xiaojin Shen and Xiaosha Chen and Xinnan Song and Xinyi Zhou and Y. X. Zhu and Yanping Huang and Yaohui Li and Yi Zheng and Yuchen Zhu and Yunxian Ma and Zhen Huang and Zhipeng Xu and Zhongyu Zhang and Dongjie Ji and Jian Liang and Jianzhong Guo and Jin Chen and Leyi Xia and Miaojun Wang and Mingming Li and Peng Zhang and Ruyi Chen and Shangmian Sun and Shaoqing Wu and Shengfeng Ye and T. Wang and W. L. Xiao and Wei An and Xianzu Wang and Xiaowen Sun and Xiaoxiang Wang and Ying Tang and Yukun Zha and Zekai Zhang and Zhe Ju and Zhen Zhang and Zihua Qu},
+      year={2025},
+      eprint={2512.02556},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2512.02556}, 
+}
+
+@misc{pg19,
+      title={Compressive Transformers for Long-Range Sequence Modelling}, 
+      author={Jack W. Rae and Anna Potapenko and Siddhant M. Jayakumar and Timothy P. Lillicrap},
+      year={2019},
+      eprint={1911.05507},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/1911.05507}, 
+}
+
+@misc{kvzap,
+      title={{KVzap}: Fast, Adaptive, and Faithful {KV} Cache Pruning}, 
+      author={Simon Jegou and Maximilian Jeblick},
+      year={2026},
+      eprint={2601.07891},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2601.07891}, 
+}
+
+@misc{
+kvp,
+title={Learning to Evict from Key-Value Cache},
+author={Luca Moschella and Laura Manduchi and Ozan Sener},
+year={2026},
+url={https://openreview.net/forum?id=t7lJ2OEGbJ}
+}
+
+@misc{fastkvzip,
+      title={{Fast KVzip}: Efficient and Accurate {LLM} Inference with Gated {KV} Eviction}, 
+      author={Jang-Hyun Kim and Dongyoon Han and Sangdoo Yun},
+      year={2026},
+      eprint={2601.17668},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2601.17668}, 
+}
+
+@misc{flashdecoding,
+year={2023},
+title={Flash-Decoding for long-context inference},
+author={Dao, Tri and Haziza, Daniel and Massa, Francisco and Sizov, Grigory},
+url={https://pytorch.org/blog/flash-decoding}
+}
+
+@misc{deepseekv4,
+      title={{DeepSeek-V4}: Towards Highly Efficient Million-Token Context Intelligence},
+      author={DeepSeek-AI},
+      year={2026},
+      url={https://huggingface.co/collections/deepseek-ai/deepseek-v4}
+}
+
+@misc{medtner,
+  author = "Wikipedia",
+  title = "{N}ikolai {M}edtner - {W}ikipedia",
+  year = "2026",
+  url = "https://en.wikipedia.org/wiki/Nikolai_Medtner",
+}

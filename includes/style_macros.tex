@@ -1,0 +1,47 @@
+\newcommand{\myParagraphWithoutTitle}{\paragraph{}\hspace{-1em}}
+
+\newcommand{\myDisplaySkip}{0.4em}
+\AtBeginDocument{
+  \setlength{\abovedisplayskip}{\myDisplaySkip}
+  \setlength{\belowdisplayskip}{\myDisplaySkip}
+  \setlength{\abovedisplayshortskip}{\myDisplaySkip}
+  \setlength{\belowdisplayshortskip}{\myDisplaySkip}
+}
+
+\NewDocumentEnvironment{myEquation}{+b}{\begin{equation*}\adjustbox{max width=\linewidth}{$\displaystyle#1$}\end{equation*}}{}
+
+\newcommand{\declareGenericFig}[5]{
+  \expandafter\newcommand\csname myFig@#1\endcsname[2]{
+    \begin{#4}[##1]
+      \centering
+      \includegraphics[width=#5\dimexpr ##2\linewidth \relax]{figures/#1}
+      \caption[#2]{#2. #3}
+      \label{fig:#1}
+    \end{#4}
+  }
+}
+\newcommand{\declareFig}[3]{\declareGenericFig{#1}{#2}{#3}{figure}{0.6}}
+\newcommand{\declareWideFig}[3]{\declareGenericFig{#1}{#2}{#3}{figure}{1}}
+
+\definecolor{myRoundedFigBorderColor}{HTML}{666666}
+\newcommand{\declareRoundedGenericFig}[6]{
+  \expandafter\newcommand\csname myFig@#1\endcsname[2]{
+    \begin{#5}[##1]
+      \centering
+      \begin{tikzpicture}
+        \node[
+          draw=myRoundedFigBorderColor,
+          line width=1pt,
+          rounded corners=5pt,
+          inner sep=#2
+        ] {\includegraphics[width=#6\dimexpr ##2\linewidth \relax]{figures/#1}};
+      \end{tikzpicture}
+      \caption[#3]{#3. #4}
+      \label{fig:#1}
+    \end{#5}
+  }
+}
+\newcommand{\declareRoundedFig}[4]{\declareRoundedGenericFig{#1}{#2}{#3}{#4}{figure}{0.6}}
+\newcommand{\declareRoundedWideFig}[4]{\declareRoundedGenericFig{#1}{#2}{#3}{#4}{figure}{1}}
+
+\newcommand{\myFig}[3]{\csname myFig@#1\endcsname{#2}{#3}}

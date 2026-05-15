@@ -1,0 +1,66 @@
+\section{Method}
+In this section, we present \textbf{Write-Gated KV (WG-KV)}, a learnable KV Admission mechanism designed to address the aforementioned inference inefficiencies. We first introduce the architectural overview of WG-KV (\cref{subsec:arch}). Then, we derive the differentiable gating mechanism that enables end-to-end learning of token utility (\cref{subsec:gate}). Finally, we present the training objective for learning the admission policy (\cref{subsec:objective}).
+
+\subsection{Architectural overview}
+\label{subsec:arch}
+
+\myFig{overview}{t}{1}
+
+The core philosophy of WG-KV is to filter noise at the source by deciding \textit{what gets persisted in memory}. We introduce a lightweight \textbf{Write-Gate MLP} (\cref{fig:overview}a) into the standard attention block to evaluate the gating score $g_{t} \in [0, 1]$ for each token. Based on this score, the system selectively routes the KV pair to one of two logical memory regions: \textit{(1) Global cache:} A memory region for tokens with high gating score ($g_{t} \approx 1$). These tokens are retained persistently to support long-term dependencies. \textit{(2) Local cache:} A sliding window of size $W_{\text{local}}$ that unconditionally retains recent tokens to support their transient utility. Upon exiting this window, tokens with low gating score ($g_{t} \approx 0$) are discarded.
+
+\subsection{Differentiable gating mechanism}
+\label{subsec:gate}
+
+To learn the gating score $g$, we derive it using the MLP and subsequently integrate it into the attention formulation. Specifically, for layer $l$, head $h$, token $t$, the input feature $x_{l,h,t}$ is defined by concatenating the pre-RoPE key $k_{l,h,t}$ and the post-RoPE key $k_{l,h,t}^{\text{rope}}$, with both terms normalized via RMSNorm \cite{rope,rmsnorm}:\footnote{In the context of Grouped-Query Attention \cite{gqa}, the term ``head'' specifically refers to the Key-Value (KV) head. We use ``head'' for simplicity throughout the paper.}
+\begin{myEquation}
+    x_{l,h,t} = \left[\operatorname{RMSNorm}(k_{l,h,t}); \operatorname{RMSNorm}(k_{l,h,t}^{\text{rope}})\right]
+\end{myEquation}
+
+The gating score $g_{l,h,t}$ is then formulated as:
+\begin{myEquation}
+    g_{l,h,t} = \sigma\left(W^2_{l,h} \cdot \operatorname{GELU}(W^1_{l,h} \cdot x_{l,h,t} + b^1_{l,h}) + b^2_{l,h}\right)
+\end{myEquation}%
+where $W^1_{l,h}, b^1_{l,h},W^2_{l,h}, b^2_{l,h}$ are learnable weights, and $\sigma$ is the sigmoid function.
+
+\paragraph{Write-Gated Attention.}
+Standard Scaled Dot-Product Attention computes the output for a query $q_i \in \mathbb{R}^d$ against $\{(k_j,v_j)\}_{j \le i}$ as:\footnote{For notational simplicity, we omit the layer ($l$) and head ($h$) subscripts in variables like $q_t$, $k_t$, $v_t$ and $g_t$.}
+\begin{myEquation}
+    \operatorname{Attn}(q_i, K_{\leq i}, V_{\leq i}) = \sum_{j \le i} \frac{\exp(q_i \cdot k_j / \sqrt{d})}{\sum_{p \le i} \exp(q_i \cdot k_p / \sqrt{d})} \, v_j
+\end{myEquation}
+
+To simulate the effect of admission during training, we modulate attention scores via mask $m_{ij}$ that guarantees full visibility within the local window $W_{\text{local}}$ while weighting distant tokens by $g_j$:
+\begin{myEquation}
+m_{ij} = \max(\mathbb{1}(i - j < W_{\text{local}}), g_j)
+\end{myEquation}%
+where $\mathbb{1}$ is the indicator function. Our proposed Write-Gated Attention is then formulated as:
+\begin{myEquation}
+    \widetilde{\operatorname{Attn}}(q_i, K_{\leq i}, V_{\leq i}) = \sum_{j \le i} \frac{\exp(q_i \cdot k_j / \sqrt{d}) \cdot m_{ij}}{\sum_{p \le i} \exp(q_i \cdot k_p / \sqrt{d}) \cdot m_{ip}} \, v_j
+\end{myEquation}
+
+This formulation ensures that if $g_j=0$, the token $j$ effectively vanishes from the attention of distant queries, mimicking the behavior of not writing it to the global cache. Conversely, if $g_j=1$, the token remains visible to all future queries, simulating its admission to the global cache.
+
+\paragraph{Log-space transformation for efficient training.}
+While the multiplicative gating above is theoretically sound, standard attention kernels \cite{flashattn} are optimized for $\exp(q \cdot k)$. Introducing a per-token multiplication factor disrupts standard kernel optimizations. To address this, we transform the gating operation into the log-space bias:
+\begin{myEquation}
+    \exp\left(q_i \cdot k_j / \sqrt{d}\right) \cdot m_{ij} = \exp\left(q_i \cdot k_j / \sqrt{d} + \log(m_{ij})\right)
+\end{myEquation}
+
+Write-Gated Attention is thus reformulated as:
+\begin{myEquation}
+    \widetilde{\operatorname{Attn}}(q_i, K_{\leq i}, V_{\leq i})=\operatorname{Softmax}\left( q_iK_{\leq i}^\top/\sqrt{d} + B_{\text{gate}} \right) V_{\leq i}
+\end{myEquation}%
+where $B_{\text{gate}}$ is an attention bias matrix derived from $\log(m_{ij})$. In practice, we compute $\log(m_{ij} + \epsilon)$ with small $\epsilon$ for numerical stability. This log-space transformation allows us to leverage generalized attention kernels, such as FlexAttention \cite{flexattn}, for efficient training on long sequences.
+
+\subsection{Training objective}
+\label{subsec:objective}
+
+To learn the admission policy, we optimize a joint objective. We define the total loss $\mathcal{L}_{\text{total}}$ as:
+\begin{myEquation}
+\mathcal{L}_{\text{total}} = \mathcal{L}_{\text{distill}} + \lambda \mathcal{L}_{\text{sparsity}}
+\end{myEquation}%
+\begin{myEquation}
+\mathcal{L}_{\text{sparsity}} = \frac{1}{L \cdot H \cdot T}\sum_{l,h,t} \big( g_{l,h,t} + g_{l,h,t}(1 - g_{l,h,t}) \big)
+\end{myEquation}%
+where $\mathcal{L}_{\text{distill}}$ denotes the L2 distillation loss computed on the hidden states of the final layer against the original full-attention model, while $\lambda$ serves as a hyperparameter controlling the trade-off between representation fidelity and KV cache sparsity.
+
+$\mathcal{L}_{\text{sparsity}}$ incorporates two regularization terms for $g_{l,h,t}$: the first term induces sparsity by minimizing global cache admission, while the second penalizes non-binary values, encouraging the gate to converge towards discrete decisions (0 or 1). During inference, we apply a hard threshold $\tau$ to binarize $g$ via $\mathbb{1}(g \ge \tau)$ for admission decisions.

@@ -1,0 +1,3 @@
+\section*{Ethical Considerations}
+
+Because WG-KV filters tokens from the KV cache, there is a risk that critical safety guardrails, alignment instructions, or system prompts could be inadvertently discarded over extended contexts. Adversaries could potentially exploit this mechanism by crafting malicious inputs designed to manipulate the gating scores and intentionally flush safety-critical tokens, thereby facilitating jailbreak attacks. Future deployments should incorporate targeted mitigation strategies to ensure that efficiency gains do not compromise model safety and alignment.
