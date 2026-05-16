@@ -8,7 +8,7 @@
 
 \declareFig{overview}{Overview of Write-Gated KV}{}
 
-\declareWideFig{management}{Dual-cache paged memory management}{(a--c) To handle ragged cache growth across heads, we decouple the logical view into a fixed-size \textit{local cache} and a growing \textit{global cache}. These are mapped to a unified physical \textit{KV pool} via per-head \textit{page tables} to prevent memory fragmentation. (d) The cache update logic during decoding. We employ \textit{lazy promotion} where the token exiting the local window is inspected upon replacement.}
+\declareWideFig{management}{Dual-cache paged memory management}{(a--c) To handle ragged cache growth across heads, we decouple the logical view into a fixed-size \textit{local cache} and a growing \textit{global cache}, mapped to a unified physical \textit{KV pool} via per-head \textit{page tables} to prevent memory fragmentation. (d) The cache update logic during decoding. We employ \textit{lazy promotion} where the token exiting the local window is inspected (and possibly promoted) upon replacement.}
 
 \declareWideFig{benchmark}{Long-context HELMET task accuracy on Llama-3.1-8B}{The x-axis represents the normalized KV cache size. WG-KV consistently outperforms baselines under tight admission budgets.}
 

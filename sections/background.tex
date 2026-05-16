@@ -7,16 +7,16 @@ The core of the Transformer architecture \cite{attn} in LLMs is the attention me
     \operatorname{Attn}(q_t, K_{\leq t}, V_{\leq t}) = \operatorname{Softmax}\left(q_t K_{\leq t}^\top/\sqrt{d}\right) V_{\leq t}
 \end{myEquation}
 
-In standard autoregressive generation, recomputing $K_{\leq t}$ and $V_{\leq t}$ from all previous tokens at every step would be computationally prohibitive. To address this, inference engines employ a \textbf{KV cache}, storing the key and value vectors for previous tokens. At each step $t$, the system only computes the new pair $(k_t, v_t)$, appends it to the cache, and performs attention over the accumulated state. However, as the sequence length increases, the attention mechanism presents distinct bottlenecks during the two phases of inference: \textit{prefilling} and \textit{decoding}.
+In standard autoregressive generation, recomputing $K_{\leq t}$ and $V_{\leq t}$ from all previous tokens at every step $t$ would be computationally prohibitive. To address this, inference engines employ a \textbf{KV cache}, storing the key and value vectors for previous tokens. At each step $t$, the system only computes the new pair $(k_t, v_t)$, appends it to the cache, and performs attention over the accumulated state. However, as the sequence length increases, the attention mechanism presents distinct bottlenecks during the two phases of inference: \textit{prefill} and \textit{decode}.
 
-\textit{During prefilling}, the model processes the sequence of length $N$ in parallel, with the quadratic complexity of attention $O(N^2)$ quickly dominates execution time (\cref{fig:breakdown}a). \textit{During decoding}, the model generates tokens autoregressively, making the process memory-bound as it necessitates loading the KV cache from memory at every step. As the sequence grows, the massive data transfer saturates memory bandwidth, driving up latency (\cref{fig:breakdown}b), while the expanding cache occupies significant GPU memory (\cref{fig:breakdown}c).
+\textit{During prefilling}, the model processes the sequence of length $N$ in parallel, with the quadratic complexity of attention $O(N^2)$ quickly dominates execution time (\cref{fig:breakdown}a). \textit{During decoding}, the model generates tokens autoregressively, making the process memory-bound as each step requires loading the KV cache from memory. As the sequence grows, the massive data transfer saturates memory bandwidth, driving up latency (\cref{fig:breakdown}b), while the expanding cache occupies significant GPU memory (\cref{fig:breakdown}c).
 
 \myFig{breakdown}{t}{1}
 
 \subsection{A causal framework for KV management}
 \label{subsec:framework}
 
-Formally, we can model the KV cache $\mathcal{C}_t$ for a certain attention head at time step $t$ as a set of KV pairs stored in memory. In standard LLM inference, the cache management policy is trivial: it is an append-only operation where every new token's state $(k_t, v_t)$ is indiscriminately admitted throughout the entire inference process:
+Formally, we can model the KV cache $\mathcal{C}_t$ for a certain attention head at step $t$ as a set of KV pairs stored in memory. In standard LLM inference, the cache management policy is trivial: it is an append-only operation where every new token's state $(k_t, v_t)$ is indiscriminately admitted throughout the entire inference process:
 \begin{myEquation}
     \mathcal{C}_t^{\text{std}} = \mathcal{C}_{t-1}^{\text{std}} \cup \{(k_t, v_t)\}
 \end{myEquation}
@@ -73,4 +73,4 @@ The utility of a token is not intrinsic to the token itself but is dependent on 
 
 Implementing a fine-grained admission policy introduces non-trivial systems challenges. In standard dense attention, the KV cache for a sequence is represented as a contiguous tensor. However, independent admission decisions by each head, as motivated in \cref{subsec:sparsity}, result in a cache that is ``ragged'' across two dimensions: \textit{(1) Across heads:} Different heads prioritize different tokens, leading to uneven cache lengths within the same layer. \textit{(2) Across layers:} The level of semantic abstraction varies by depth, causing sparsity rates to diverge between shallow and deep layers.
 
-A naive implementation that simply concentrates admitted tokens leads to severe memory fragmentation, as shown in \cref{fig:fragmentation}. Pre-allocating maximum-length buffers negates the memory savings, while dynamic reallocation incurs prohibitive runtime overhead. To translate theoretical sparsity into practical wall-clock speedup and memory reduction, the system must leverage a decoupled logical-physical memory mapping to manage these irregular, head-specific cache efficiently.
+A naive implementation that simply concentrates admitted tokens leads to severe memory fragmentation, as shown in \cref{fig:fragmentation}. Pre-allocating maximum-length buffers negates the memory savings, while dynamic reallocation incurs prohibitive runtime overhead. To translate theoretical sparsity into practical wall-clock speedup and memory reduction, the system must leverage a decoupled logical-physical memory mapping to manage these head-wise irregular caches efficiently.
