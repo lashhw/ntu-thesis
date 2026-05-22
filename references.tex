@@ -1,18 +1,13 @@
 \documentclass{article}
+
+\usepackage{microtype}
 \usepackage[paperwidth=160in,paperheight=80in,margin=1in]{geometry}
-\usepackage{fontspec}
 \usepackage[numbers]{natbib}
 \usepackage[hidelinks]{hyperref}
 
-\setmainfont[
-  Ligatures=NoCommon,
-  ItalicFont=lmroman10-italic.otf,
-  BoldFont=lmroman10-bold.otf,
-  BoldItalicFont=lmroman10-bolditalic.otf
-]{lmroman10-regular.otf}
-\pagestyle{empty}
+\renewcommand{\bibsection}{}
+\DisableLigatures[f]{encoding = *, family = *}
 
 \begin{document}
-\raggedright
 \input{main.bbl}
 \end{document}
