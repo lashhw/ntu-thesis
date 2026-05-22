@@ -11,6 +11,7 @@ jobs:
         with:
           root_file: main.tex
           latexmk_use_xelatex: true
+          extra_system_packages: poppler-utils
           post_compile: |
             latexmk -xelatex references.tex
             pdftotext -enc UTF-8 -nopgbrk references.pdf references.txt
