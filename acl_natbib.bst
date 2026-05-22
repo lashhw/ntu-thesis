@@ -116,7 +116,7 @@ FUNCTION {init.urlbst.variables}
   % The first set allow you to enable or disable certain functionality.
   #1 'addeprints :=	% 0=no eprints; 1=include eprints
   #2 'hrefform :=	% 0=no crossrefs; 1=hypertex hrefs; 2=hyperref hrefs
-  #1 'inlinelinks :=	% 0=URLs explicit; 1=URLs attached to titles
+  #0 'inlinelinks :=	% 0=URLs explicit; 1=URLs attached to titles
   #1 'adddoi :=	% 0=no DOI resolver; 1=include it
   #1 'addpubmed :=	% 0=no PUBMED resolver; 1=include it
   #0 'doiform :=	% 0=with href; 1=with \doi{}
@@ -126,7 +126,7 @@ FUNCTION {init.urlbst.variables}
   "[link]" 'linktextstring :=	% anonymous link text
   "http://www.ncbi.nlm.nih.gov/pubmed/" 'pubmedurl :=	% prefix to make URL from PUBMED
   "https://doi.org/" 'doiurl :=	% prefix to make URL from DOI
-  "doi:" 'doiprefix :=	% printed text to introduce DOI
+  "DOI: " 'doiprefix :=	% printed text to introduce DOI
   "https://arxiv.org/abs/" 'eprinturl :=	% prefix to make URL from eprint ref
   "cited " 'citedstring :=	% label in "lastchecked" remark
   "arXiv:" 'eprintprefix :=	% text prefix printed before eprint ref
@@ -1194,7 +1194,7 @@ FUNCTION {format.doi}
       's := 't :=
       doiform #1 =
         { "\doi{" s * "}" * }
-        { doiprefix s * t make.href }
+        { doiprefix "\href{" * t * "}{\path{" * s * "}}" * }
       if$
     }
   if$
