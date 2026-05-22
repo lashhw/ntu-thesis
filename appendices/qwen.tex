@@ -1,7 +1,15 @@
 \section{Evaluation Results on Qwen Model}
 \label{app:qwen}
 
-To demonstrate the generalizability of WG-KV across different model architectures, we perform additional evaluations on the non-reasoning variant of Qwen3-4B-2507.
+\myFig{benchmark_qwen}{t}{1}
+
+\myFig{perf_qwen}{t}{1}
+
+\myFig{quest}{t}{1}
+
+\myFig{integration_new}{t}{1}
+
+To demonstrate the generalizability of WG-KV across different model architectures, we perform additional evaluations on the non-reasoning variant of Qwen3-4B-2507 \cite{qwen3}.
 
 \subsection{Sparsity-accuracy tradeoff}
 
@@ -9,4 +17,4 @@ To demonstrate the generalizability of WG-KV across different model architecture
 
 \subsection{System efficiency}
 
-Following the same experimental setup used for Llama-3.1-8B, we measure the end-to-end latency and memory usage on Qwen3-4B-2507 using the trained Write-Gate MLP at $\lambda=0.32$, which achieves approximately 80\% sparsity (i.e., admitting 20\% KVs). As shown in \cref{fig:perf_qwen}, WG-KV achieves significant efficiency gains. Specifically, we observe \textbf{3.23--4.17x} speedup in prefill latency and \textbf{1.59--2.50x} speedup in decode latency across varying sequence lengths. Furthermore, WG-KV reduces memory usage by \textbf{53--69\%} compared to the full attention baseline.
+Following the same experimental setup used for Llama-3.1-8B, we measure the end-to-end latency and memory usage on Qwen3-4B-2507 at $\lambda=0.32$, which achieves approximately 80\% sparsity (i.e., admitting 20\% KVs). As shown in \cref{fig:perf_qwen}, WG-KV achieves a \textbf{3.23--4.17x} speedup in prefill and a \textbf{1.59--2.50x} speedup in decode across varying sequence lengths. Furthermore, WG-KV reduces memory usage by \textbf{53--69\%} compared to the standard full-attention model.

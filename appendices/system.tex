@@ -1,12 +1,10 @@
 \section{Detailed Experimental Setup for System Efficiency}
 \label{app:system}
 
-\myFig{benchmark_qwen}{t}{1}
-
 This section details the software stack, attention kernels, and evaluation setup underpinning the latency results reported in \cref{sec:system_performance}. By rigorously accounting for all runtime overheads, we demonstrate that our results reflect the real execution time of a fully functional system prototype rather than theoretical estimates.
 
 \subsection{Software stack and attention kernels}
-To ensure a fair comparison, both the full-attention baseline and WG-KV are built upon Hugging Face Transformers \cite{transformers}. We utilize \texttt{AutoModelForCausalLM} for inference but replace the core attention computation as described below.
+To ensure a fair comparison, both the full-attention baseline and WG-KV are built upon Hugging Face Transformers \cite{transformers}. We utilize \texttt{AutoModelForCausalLM} for inference but replace the core attention kernels as follows:
 
 \paragraph{Prefill phase.} We employ vLLM's \texttt{sparse\_attn\_func} kernel, which is an efficient sparse FlashAttention kernel based on MInference \cite{minference}. The full-attention baseline operates with a standard causal mask, whereas WG-KV utilizes the kernel to enforce the vertical-slash sparse attention pattern.
 
@@ -15,13 +13,7 @@ To ensure a fair comparison, both the full-attention baseline and WG-KV are buil
 \myParagraphWithoutTitle By standardizing the underlying attention kernels, we ensure that the observed speedups are attributable solely to algorithmic efficiency rather than differences in kernel optimizations.
 
 \subsection{System implementation and overhead accounting}
-Our evaluations measure the performance of a fully implemented dual-cache paged memory system. The reported latency includes the elapsed time for all CPU-side and GPU-side operations required to handle the admission policy and the resulting ragged KV cache structure. Specifically, the timing loop encompasses the forward computation of the Write-Gate MLP, the allocation of the KV cache, the management of the page table mapping, and the generation of block indices required by the \texttt{sparse\_attn\_func} kernel. During the decoding phase, the measurement also includes the full overhead of the lazy promotion logic. This involves the operations to check the victim token, update the page tables, and migrate high-utility tokens from local to global cache when necessary. This comprehensive accounting ensures that the reported speedups faithfully translate to real-world efficiency.
-
-\myFig{perf_qwen}{b}{1}
-
-\myFig{quest}{t}{1}
-
-\myFig{integration_new}{t}{1}
+Our evaluations measure the performance of a fully implemented dual-cache paged memory system. The reported latency includes the elapsed time for all CPU-side and GPU-side operations required to handle the admission decisions and the resulting ragged KV cache structure. Specifically, the timing loop encompasses the forward computation of the Write-Gate MLP, the allocation of the KV cache, the management of the page table mapping, and the generation of block indices required by the \texttt{sparse\_attn\_func} kernel. During the decoding phase, the measurement also includes the full overhead of the lazy promotion logic. This involves the operations to check the victim token, update the page tables, and migrate tokens from local to global cache when necessary. This comprehensive accounting ensures that the reported speedups faithfully translate to real-world efficiency.
 
 \subsection{Evaluation setup}
-To accurately reflect realistic workloads, evaluations are performed using input sequences sampled from the PG19 \cite{pg19} long-document dataset. All experiments are conducted on a single H200 GPU with a batch size of 1. Latency is recorded via CUDA Events after one warm-up pass. We report the end-to-end Time to First Token (TTFT) for the prefill phase, and the average Time per Output Token (TPOT) over 300 generation steps for the decode phase.
+To accurately reflect realistic workloads, evaluations are performed using input sequences sampled from the PG-19 \cite{pg19} long-document dataset. All experiments are conducted on a single H200 GPU with a batch size of 1. Latency is recorded via CUDA Events after one warm-up pass. We report the end-to-end Time to First Token (TTFT) for the prefill phase, and the average Time per Output Token (TPOT) over 300 generation steps for the decode phase.

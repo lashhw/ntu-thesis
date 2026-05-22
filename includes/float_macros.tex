@@ -22,11 +22,11 @@
 
 \declareWideFig{quest}{Synergy between WG-KV and Quest}{By pre-filtering redundant tokens, WG-KV effectively (a) reduces KV memory usage. This compacted cache shrinks the candidate pool for selection, leading to (b) lower decode-time memory access and (c) reduced attention latency. Furthermore, integrating WG-KV (d) maintains nearly identical task accuracy compared to standalone Quest.}
 
-\declareWideFig{integration_new}{Long-context HELMET task accuracy under varying selection budgets}{The results demonstrate that integrating WG-KV with Quest consistently matches the robust accuracy of standalone Quest, highlighting the composable nature of pre-write admission and read-time selection.}
+\declareWideFig{integration_new}{Long-context HELMET task accuracy under varying selection budgets}{The results demonstrate that integrating WG-KV with Quest consistently matches the accuracy of standalone Quest, highlighting the composable nature of pre-write Admission and read-time Selection.}
 
 \declareFig{evict}{Conceptual illustration of the synergy between KV Admission and Eviction}{}
 
-\declareFig{snapkv_short}{Synergy between WG-KV and SnapKV on AIME25 under strict memory limits}{}
+\declareFig{snapkv_short}{Synergy between WG-KV and SnapKV on AIME25 under strict memory bounds}{}
 
 \declareFig{snapkv}{Admission-Eviction synergy on AIME25 using Qwen3-4B-2507}{``Off'' denotes the baseline where WG-KV is disabled, and the reported metrics (KV Cache Size and \# Eviction Triggers) are averaged across all samples.}
 
@@ -37,8 +37,6 @@
 \declareFig{threshold_cmp}{Impact of local cache on sparsity-loss tradeoff}{Removing local cache leads to a sharp surge in distillation loss.}
 
 \declareWideFig{gate}{Visualization of input-dependent admission patterns}{The heatmaps show the normalized KV cache size across each head for Llama-3.1-8B with WG-KV. We compare the \textit{(a) Code Summarization} task, which exhibits a relatively uniform distribution, against the \textit{(b) HTML to TSV} task, which shows a sparser pattern. This contrast demonstrates that WG-KV learns an input-dependent policy based on the semantic structure of the task.}
-
-\declareRoundedWideFig{interpret_summary}{10pt}{Aggregated admission decisions across all attention heads}{Color intensity denotes the proportion of heads admitting each token. High cross-head consensus is observed on structural control tokens, key entities, and semantically dense words, whereas function words and pronouns exhibit lower admission ratios.}
 
 \declareRoundedWideFig{l0h7}{10pt}{Full visualization of admission decisions for Layer 1, Head 8}{}
 
@@ -53,6 +51,8 @@
 \declareRoundedWideFig{l13h1}{10pt}{Full visualization of admission decisions for Layer 14, Head 2}{}
 
 \declareRoundedWideFig{l18h6}{10pt}{Full visualization of admission decisions for Layer 19, Head 7}{}
+
+\declareRoundedWideFig{interpret_summary}{10pt}{Aggregated admission decisions across all attention heads}{Color intensity denotes the proportion of heads admitting each token. High cross-head consensus is observed on structural control tokens, key entities, and semantically dense words, whereas function words and pronouns exhibit lower admission ratios.}
 
 \newcommand{\tabReplay}[2]{
   \begin{table}[#1]

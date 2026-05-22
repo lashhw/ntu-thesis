@@ -3,7 +3,7 @@
 
 Implementing WG-KV presents a unique systems challenge: unlike standard Transformers where the KV cache grows uniformly across all heads, our admission policy results in a \textit{ragged cache structure} with highly irregular sequence lengths across heads (as discussed in \cref{subsec:ragged}). To translate theoretical sparsity into wall-clock speedup and memory reduction, we present a \textbf{hardware-aware implementation} that leverages paged memory management to handle this irregular cache growth efficiently.
 
-\myFig{management}{t}{1}
+\myFig{management}{t}{0.99}
 
 \subsection{Dual-cache paged memory management}
 \label{subsec:dual}
@@ -16,9 +16,9 @@ To address memory fragmentation caused by head-specific admission, we decouple t
 In the prefill phase, the system processes the entire input sequence in parallel. The goal is to compute attention and populate the KV cache efficiently.
 
 \paragraph{Vertical-slash sparse attention.}
-To accelerate attention computation, we leverage the sparsity pattern dictated by score $g$. Following the Write-Gated Attention formulation, the attention mask $M$ exhibits a ``vertical-slash'' pattern (\cref{fig:overview}b): tokens attend to preceding \textit{globally} high-utility tokens (``vertical'') and their \textit{local} neighborhood (``slash''). Formally, for query $i$, key $j$, $M_{ij}$ is defined as:
+We leverage the sparsity pattern dictated by score $g$ to accelerate attention computation. Following the Write-Gated Attention formulation, the attention mask $M$ exhibits a ``vertical-slash'' pattern (\cref{fig:overview}b): tokens attend to preceding \textit{globally} high-utility tokens (``vertical'') and their \textit{local} neighborhood (``slash''). Formally, for query $i$, key $j$, $M_{ij}$ is defined as:
 \begin{myEquation}
-    M_{ij} = \big(\mathbb{1}(i - j < W_{local}) \lor \mathbb{1}(g_j \ge \tau)\big) \land \mathbb{1}(i \geq j)
+    M_{ij} = \big(\mathbb{1}(i - j < W_{\text{local}}) \lor \mathbb{1}(g_j \ge \tau)\big) \land \mathbb{1}(i \geq j)
 \end{myEquation}
 
 We utilize the sparse FlashAttention kernel from MInference \cite{minference} to compute attention efficiently. This avoids the cost of dense $O(N^2)$ attention by skipping masked-out regions.
@@ -27,6 +27,6 @@ We utilize the sparse FlashAttention kernel from MInference \cite{minference} to
 
 \subsection{Efficient decoding via lazy promotion}
 
-In the decode phase, tokens are generated autoregressively. Modern serving engines, such as vLLM \cite{pagedattn} and SGLang \cite{sglang}, rely on paged-KV systems to maximize throughput, but assume uniform cache size across all heads. To maintain compatibility with this industry-standard infrastructure while managing the ragged KV cache growth, we employ a \textbf{lazy promotion} strategy. This mechanism enforces a local window size $W_{\text{local}}$ via a ring buffer while selectively persisting high-utility states.
+In the decode phase, tokens are generated autoregressively. Unlike standard inference systems \cite{pagedattn,sglang} that continuously append new KVs to a uniformly growing cache, WG-KV manages the head-wise irregular cache lengths efficiently via a \textbf{lazy promotion} strategy. This mechanism enforces the local window size $W_{\text{local}}$ via a ring buffer while selectively persisting high-utility states.
 
-As illustrated in \cref{fig:management}d, the cache update mechanism operates per-head: Upon generating a new token $(k_t, v_t)$ with score $g_t$, the system (1) inspects the ``victim'' token at the current \textbf{local pointer}. If the victim's stored score satisfies $g \ge \tau$, it is (2) promoted to the global cache, advancing the \textbf{global pointer}. The new token then (3) overwrites the victim in the local cache, and the local pointer is incremented modulo $W_{\text{local}}$. To compute attention over the resulting ragged cache, we can fold the head dimension into the batch dimension to leverage variable-length PagedAttention kernel, with details provided in Appendix~\ref{app:kernel}.
+As illustrated in \cref{fig:management}d, for a given head, upon generating a new token $(k_t, v_t)$ with score $g_t$, the system (1) inspects the ``victim'' token at the current \textbf{local pointer}. If the victim's stored score satisfies $g \ge \tau$, it is (2) promoted to the global cache, advancing the \textbf{global pointer}. The new token then (3) overwrites the victim in the local cache, and the local pointer is incremented modulo $W_{\text{local}}$. To compute attention over the resulting ragged cache, we can fold the head dimension into the batch dimension to leverage variable-length PagedAttention \cite{pagedattn} kernel, with details provided in Appendix~\ref{app:kernel}.

@@ -16,7 +16,7 @@ In standard autoregressive generation, recomputing $K_{\leq t}$ and $V_{\leq t}$
 \subsection{A causal framework for KV management}
 \label{subsec:framework}
 
-Formally, we can model the KV cache $\mathcal{C}_t$ for a certain attention head at step $t$ as a set of KV pairs stored in memory. In standard LLM inference, the cache management policy is trivial: it is an append-only operation where every new token's state $(k_t, v_t)$ is indiscriminately admitted throughout the entire inference process:
+Formally, we can model the KV cache $\mathcal{C}_t$ for a certain attention head at step $t$ as a set of KV pairs stored in memory. In standard LLM inference, the cache management policy is trivial: it is an append-only operation where every new token's state $(k_t, v_t)$ is indiscriminately accumulated throughout the entire inference process:
 \begin{myEquation}
     \mathcal{C}_t^{\text{std}} = \mathcal{C}_{t-1}^{\text{std}} \cup \{(k_t, v_t)\}
 \end{myEquation}
@@ -45,7 +45,7 @@ We identify \textit{Admission} as the missing third primitive. Unlike Eviction, 
     \mathcal{C}_t = \operatorname{Admit}(\mathcal{C}_{t-1}, k_t, v_t)
 \end{myEquation}
 
-Ideally, an Admission policy prevents the persistence of noise tokens, ensuring $\mathcal{C}_t$ holds only critical information. This avoids the cost of accumulating redundant states, reducing KV growth and alleviating subsequent attention bottlenecks.
+Ideally, an admission policy prevents the persistence of noise tokens, ensuring $\mathcal{C}_t$ holds only critical information. This avoids the cost of accumulating redundant states, reducing KV growth and alleviating subsequent attention bottlenecks.
 
 \paragraph{A unified view.}
 
@@ -62,9 +62,9 @@ To design an effective KV Admission policy, we must first understand the charact
 Attention scores are not uniformly distributed; they exhibit pronounced sparsity where a small subset of tokens attracts the majority of attention. As shown in \cref{fig:distribution}a, specific tokens (e.g., Token 383 in Layer 10, Head 19) act as high-utility tokens, consistently receiving high attention from subsequent queries. In contrast, other tokens (e.g., Token 1185 in the same head) are virtually ignored. This suggests that a large portion of the KV cache stores ``noise'' that contributes negligible value to future representations.
 
 \paragraph{Head-specific relevance.}
-The utility of a token is not intrinsic to the token itself but is dependent on the attention head. A token that is critical for one head may be irrelevant for another. For instance, comparing the two heads in \cref{fig:distribution}b, we observe that while Token 1185 serves as a primary attention target for Layer 22, Head 6, it is almost completely ignored by Layer 10, Head 19. Conversely, Token 383, which was ignored by the former, becomes highly salient for the latter. This implies that a unified admission policy (e.g., dropping a token from all heads simultaneously) is suboptimal. An effective Admission mechanism must be fine-grained, making independent decisions for each head.
+The utility of a token is not intrinsic to the token itself but is dependent on the attention head. A token that is critical for one head may be irrelevant for another. For instance, comparing the two heads in \cref{fig:distribution}b, we observe that while Token 1185 serves as a primary attention target for Layer 22, Head 6, it is almost completely ignored by Layer 10, Head 19. Conversely, Token 383, which was ignored by the former, becomes highly salient for the latter. This implies that a unified admission policy (e.g., dropping a token from all heads simultaneously) is suboptimal. An effective admission policy must be fine-grained, making independent decisions for each head.
 
-\paragraph{The necessity of local context.} While long-range attention is sparse, local attention exhibits strong recency bias. As illustrated in \cref{fig:distribution}c, Token 383 in Layer 22, Head 6 exemplifies a phenomenon of ``transient utility.'' Although this token eventually receives near-zero attention from distant queries, it attracts significant attention from its immediate successors. This creates a dilemma for any admission policy: a token cannot be immediately dismissed as globally irrelevant, as it is temporarily high-utility. A hybrid mechanism is therefore needed to preserve recent tokens briefly for local dense attention before switching to utility-based admission for long-range context.
+\paragraph{The necessity of local context.} While long-range attention is sparse, local attention exhibits strong recency bias. As illustrated in \cref{fig:distribution}c, Token 383 in Layer 22, Head 6 exemplifies a phenomenon of ``transient utility.'' Although this token eventually receives near-zero attention from distant queries, it attracts significant attention from its immediate successors. This creates a dilemma for any admission policy: a token cannot be immediately dismissed as universally irrelevant, as it exhibits strong local saliency. A hybrid mechanism is therefore needed to preserve recent tokens briefly for local dense attention before switching to utility-based admission for long-range context.
 
 \subsection{Systems challenges with ragged KV states}
 \label{subsec:ragged}
