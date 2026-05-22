@@ -29,4 +29,5 @@ jobs:
           name: ${{ env.ARTIFACT_NAME }}
           path: |
             ${{ env.PDF_NAME }}
+            references.pdf
             references.txt
