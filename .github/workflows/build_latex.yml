@@ -11,6 +11,10 @@ jobs:
         with:
           root_file: main.tex
           latexmk_use_xelatex: true
+          post_compile: |
+            latexmk -xelatex references.tex
+            pdftotext -enc UTF-8 -nopgbrk references.pdf references.txt
+            sed -i '/^[[:space:]]*$/d' references.txt
       - name: Rename PDF with commit hash
         shell: bash
         run: |
@@ -19,8 +23,10 @@ jobs:
           mv main.pdf "${COMBINED_NAME}.pdf"
           echo "ARTIFACT_NAME=${COMBINED_NAME}" >> "${GITHUB_ENV}"
           echo "PDF_NAME=${COMBINED_NAME}.pdf" >> "${GITHUB_ENV}"
-      - name: Upload PDF file
+      - name: Upload build artifacts
         uses: actions/upload-artifact@v6
         with:
           name: ${{ env.ARTIFACT_NAME }}
-          path: ${{ env.PDF_NAME }}
+          path: |
+            ${{ env.PDF_NAME }}
+            references.txt
