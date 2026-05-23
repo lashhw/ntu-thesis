@@ -1,6 +1,6 @@
 \section{Introduction}
 
-\myFig{primitives}{t}{0.9}
+\myFloat{primitives}{t}{0.9}
 
 The capability of Large Language Models (LLMs) to process extensive contexts has revolutionized applications ranging from long-document summarization \cite{longbenchv2}, repository-level code analysis \cite{coderepoqa}, to long-term agentic planning \cite{planandact}. However, this capability comes at a steep serving cost. Long-context LLM inference is bottlenecked by both the quadratic attention complexity and the linear growth of the Key-Value (KV) cache. In long-context scenarios, the sheer volume of tokens not only incurs massive computational overhead but also exhausts limited GPU memory. Consequently, the latency and resource consumption increase significantly with the context length, rendering long-context LLM inference prohibitively expensive.
 

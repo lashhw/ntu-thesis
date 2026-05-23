@@ -1,7 +1,7 @@
 \section{Details of Eviction Synergy for Long-Chain Reasoning}
 \label{app:evict}
 
-\myFig{snapkv_short}{t}{0.75}
+\myFloat{snapkv_short}{t}{0.75}
 
 This section details the experimental setup and further analysis of the Admission-Eviction synergy introduced in Appendix~\ref{subsec:evict_synergy}, particularly in reasoning-intensive scenarios where intermediate ``thinking tokens'' cause rapid cache expansion. While WG-KV effectively filters redundant tokens at the source, real-world hardware imposes strict limits on memory capacity. This constraint is particularly pronounced in modern high-throughput serving systems \cite{pagedattn,sglang}, where multiple concurrent requests compete for a shared memory pool. To sustain inference over prolonged generation phases---such as the extended reasoning trajectories seen in complex mathematical problem-solving---the system must enforce a hard memory budget by retrospectively pruning obsolete history. Here, we demonstrate how coupling pre-write Admission with post-write Eviction effectively reserves this limited capacity exclusively for critical context, yielding a superior memory-accuracy tradeoff compared to utilizing either primitive in isolation.
 
@@ -29,7 +29,7 @@ The eviction policy operates independently for each KV head. Consider a specific
 
 We evaluate the impact of WG-KV on the AIME25 benchmark using the reasoning variant of Qwen3-4B-2507. We analyze the system's behavior in two distinct scenarios: (a) an unbounded memory setting to isolate the behavior of WG-KV, and (b) a bounded memory setting to analyze its synergy with SnapKV.
 
-\myFig{snapkv}{t}{0.7}
+\myFloat{snapkv}{t}{0.7}
 
 \paragraph{Admission alone is insufficient under strict bounds.}
 \cref{fig:snapkv}a illustrates the tradeoff when no size limit is enforced on the KV cache. Increasing $\lambda$ reduces the KV cache size but progressively degrades accuracy.
@@ -45,4 +45,4 @@ The synergy between the two primitives achieves the best of both worlds. By sett
 
 To qualitatively illustrate the synergy between KV Admission and Eviction, \cref{fig:evict_interpret} visualizes the token lifecycle during an AIME25 reasoning trace. The visualization reveals an intriguing phenomenon: fundamental semantic anchors, such as the initial problem statement (\cref{fig:evict_interpret}a), critical sub-conclusions (\cref{fig:evict_interpret}c), and the final definitive answer validation (\cref{fig:evict_interpret}e), are admitted and persistently retained to guide the global reasoning trajectory and formulate the final response. Conversely, intermediate exploratory hypotheses and trial calculations (\cref{fig:evict_interpret}b and \cref{fig:evict_interpret}d) are initially admitted by WG-KV to support immediate derivation steps, but as the model reaches intermediate milestones and transitions to subsequent logical phases, these temporary ``scratchpad'' states are retrospectively identified as obsolete and pruned by SnapKV. This demonstrates how the joint policy effectively distills convoluted thinking traces into a compact cache without sacrificing the information needed for accurate problem-solving.
 
-\myFig{evict_interpret}{t}{0.95}
+\myFloat{evict_interpret}{t}{0.95}

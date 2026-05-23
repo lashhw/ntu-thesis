@@ -54,20 +54,15 @@
 
 \declareRoundedWideFig{interpret_summary}{10pt}{Aggregated admission decisions across all attention heads}{Color intensity denotes the proportion of heads admitting each token. High cross-head consensus is observed on structural control tokens, key entities, and semantically dense words, whereas function words and pronouns exhibit lower admission ratios.}
 
-\newcommand{\tabReplay}[2]{
-  \begin{table}[#1]
-    \centering
-    \def\captext{Average last-layer hidden states MSE under different admission policies}
-    \caption[\captext]{\captext.}
-    \label{tab:replay}
-    \resizebox{#2\linewidth}{!}{
-      \begin{tabular}{ccc}
-        \toprule
-        \textbf{Own Policy} & \textbf{Replay Policy} & \textbf{Random Policy} \\ 
-        \midrule
-        0.01480 & 0.10297 & 0.10271 \\ 
-        \bottomrule
-      \end{tabular}
-    }
-  \end{table}
-}
+\declareTab{replay}
+  {Average last-layer hidden states MSE under different admission policies}
+  {}
+  {
+    \begin{tabular}{ccc}
+      \toprule
+      \textbf{Own Policy} & \textbf{Replay Policy} & \textbf{Random Policy} \\ 
+      \midrule
+      0.01480 & 0.10297 & 0.10271 \\ 
+      \bottomrule
+    \end{tabular}
+  }

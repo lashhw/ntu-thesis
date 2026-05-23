@@ -12,7 +12,7 @@
 \NewDocumentEnvironment{myEquation}{+b}{\begin{equation*}\adjustbox{max width=\linewidth}{$\displaystyle#1$}\end{equation*}}{}
 
 \newcommand{\declareGenericFig}[5]{
-  \expandafter\newcommand\csname myFig@#1\endcsname[2]{
+  \expandafter\newcommand\csname myFloat@#1\endcsname[2]{
     \begin{#4}[##1]
       \centering
       \includegraphics[width=#5\dimexpr ##2\linewidth \relax]{figures/#1}
@@ -26,7 +26,7 @@
 
 \definecolor{myRoundedFigBorderColor}{HTML}{666666}
 \newcommand{\declareRoundedGenericFig}[6]{
-  \expandafter\newcommand\csname myFig@#1\endcsname[2]{
+  \expandafter\newcommand\csname myFloat@#1\endcsname[2]{
     \begin{#5}[##1]
       \centering
       \begin{tikzpicture}
@@ -45,4 +45,17 @@
 \newcommand{\declareRoundedFig}[4]{\declareRoundedGenericFig{#1}{#2}{#3}{#4}{figure}{0.6}}
 \newcommand{\declareRoundedWideFig}[4]{\declareRoundedGenericFig{#1}{#2}{#3}{#4}{figure}{1}}
 
-\newcommand{\myFig}[3]{\csname myFig@#1\endcsname{#2}{#3}}
+\newcommand{\declareGenericTab}[6]{
+  \expandafter\newcommand\csname myFloat@#1\endcsname[2]{
+    \begin{#5}[##1]
+      \centering
+      \caption[#2]{#2. #3}
+      \label{tab:#1}
+      \resizebox{#6\dimexpr ##2\linewidth \relax}{!}{#4}
+    \end{#5}
+  }
+}
+\newcommand{\declareTab}[4]{\declareGenericTab{#1}{#2}{#3}{#4}{table}{0.6}}
+\newcommand{\declareWideTab}[4]{\declareGenericTab{#1}{#2}{#3}{#4}{table}{1}}
+
+\newcommand{\myFloat}[3]{\csname myFloat@#1\endcsname{#2}{#3}}

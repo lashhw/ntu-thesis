@@ -3,7 +3,7 @@
 
 Implementing WG-KV presents a unique systems challenge: unlike standard Transformers where the KV cache grows uniformly across all heads, our admission policy results in a \textit{ragged cache structure} with highly irregular sequence lengths across heads (as discussed in \cref{subsec:ragged}). To translate theoretical sparsity into wall-clock speedup and memory reduction, we present a \textbf{hardware-aware implementation} that leverages paged memory management to handle this irregular cache growth efficiently.
 
-\myFig{management}{t}{0.99}
+\myFloat{management}{t}{0.99}
 
 \subsection{Dual-cache paged memory management}
 \label{subsec:dual}

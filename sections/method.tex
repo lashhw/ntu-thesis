@@ -4,7 +4,7 @@ In this section, we present \textbf{Write-Gated KV (WG-KV)}, a learnable KV Admi
 \subsection{Architectural overview}
 \label{subsec:arch}
 
-\myFig{overview}{t}{1}
+\myFloat{overview}{t}{1}
 
 The core philosophy of WG-KV is to filter tokens at the source by \textit{determining which KV states merit long-term retention}. We introduce a lightweight \textbf{Write-Gate MLP} (\cref{fig:overview}a) into the standard attention block to evaluate the gating score $g_{t} \in [0, 1]$ for each token. Based on this score, the system selectively routes the KV pair to one of two logical memory regions: \textit{(1) Global cache:} A memory region for tokens with high gating score ($g_{t} \approx 1$). These tokens are retained persistently to support long-term dependencies. \textit{(2) Local cache:} A sliding window of size $W_{\text{local}}$ that unconditionally retains recent tokens to support their transient utility (\cref{subsec:sparsity}). Upon exiting this window, tokens with low gating score ($g_{t} \approx 0$) are discarded.
 

@@ -11,7 +11,7 @@ In standard autoregressive generation, recomputing $K_{\leq t}$ and $V_{\leq t}$
 
 \textit{During prefilling}, the model processes the sequence of length $N$ in parallel, with the quadratic complexity of attention $O(N^2)$ quickly dominates execution time (\cref{fig:breakdown}a). \textit{During decoding}, the model generates tokens autoregressively, making the process memory-bound as each step requires loading the KV cache from memory. As the sequence grows, the massive data transfer saturates memory bandwidth, driving up latency (\cref{fig:breakdown}b), while the expanding cache occupies significant GPU memory (\cref{fig:breakdown}c).
 
-\myFig{breakdown}{t}{1}
+\myFloat{breakdown}{t}{1}
 
 \subsection{A causal framework for KV management}
 \label{subsec:framework}
@@ -56,7 +56,7 @@ As illustrated in \cref{fig:primitives}, these primitives are not mutually exclu
 
 To design an effective KV Admission policy, we must first understand the characteristics of attention patterns. We employ Llama-3.1-8B \cite{llama3} to perform a long-context code summarization task from The Stack dataset \cite{thestack} to observe \textit{which} tokens are attended to and \textit{when}. We identify three key properties:
 
-\myFig{distribution}{t}{1}
+\myFloat{distribution}{t}{1}
 
 \paragraph{Skewed utility distribution.}
 Attention scores are not uniformly distributed; they exhibit pronounced sparsity where a small subset of tokens attracts the majority of attention. As shown in \cref{fig:distribution}a, specific tokens (e.g., Token 383 in Layer 10, Head 19) act as high-utility tokens, consistently receiving high attention from subsequent queries. In contrast, other tokens (e.g., Token 1185 in the same head) are virtually ignored. This suggests that a large portion of the KV cache stores ``noise'' that contributes negligible value to future representations.
@@ -69,7 +69,7 @@ The utility of a token is not intrinsic to the token itself but is dependent on 
 \subsection{Systems challenges with ragged KV states}
 \label{subsec:ragged}
 
-\myFig{fragmentation}{b}{0.93}
+\myFloat{fragmentation}{b}{0.93}
 
 Implementing a fine-grained admission policy introduces non-trivial systems challenges. In standard dense attention, the KV cache for a sequence is represented as a contiguous tensor. However, independent admission decisions by each head, as motivated in \cref{subsec:sparsity}, result in a cache that is ``ragged'' across two dimensions: \textit{(1) Across heads:} Different heads prioritize different tokens, leading to uneven cache lengths within the same layer. \textit{(2) Across layers:} The level of semantic abstraction varies by depth, causing sparsity rates to diverge between shallow and deep layers.
 
