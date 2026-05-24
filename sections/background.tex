@@ -69,8 +69,8 @@ The utility of a token is not intrinsic to the token itself but is dependent on 
 \subsection{Systems challenges with ragged KV states}
 \label{subsec:ragged}
 
-\myFloat{fragmentation}{b}{0.93}
-
 Implementing a fine-grained admission policy introduces non-trivial systems challenges. In standard dense attention, the KV cache for a sequence is represented as a contiguous tensor. However, independent admission decisions by each head, as motivated in \cref{subsec:sparsity}, result in a cache that is ``ragged'' across two dimensions: \textit{(1) Across heads:} Different heads prioritize different tokens, leading to uneven cache lengths within the same layer. \textit{(2) Across layers:} The level of semantic abstraction varies by depth, causing sparsity rates to diverge between shallow and deep layers.
 
 A naive implementation that simply concentrates admitted tokens leads to severe memory fragmentation, as shown in \cref{fig:fragmentation}. Pre-allocating maximum-length buffers negates the memory savings, while dynamic reallocation incurs prohibitive runtime overhead. To translate theoretical sparsity into practical wall-clock speedup and memory reduction, the system must leverage a decoupled logical-physical memory mapping to manage these head-wise irregular caches efficiently.
+
+\myFloat{fragmentation}{h}{0.93}

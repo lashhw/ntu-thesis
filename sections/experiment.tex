@@ -1,7 +1,5 @@
 \section{Experiments}
 
-\myFloat{benchmark}{t}{1}
-
 In this section, we evaluate WG-KV across (1) the sparsity-accuracy tradeoff and (2) practical system efficiency, followed by (3) a qualitative analysis of its admission patterns and additional analyses.
 
 \subsection{Experimental setup}
@@ -9,6 +7,8 @@ In this section, we evaluate WG-KV across (1) the sparsity-accuracy tradeoff and
 \paragraph{Model and training.} We implement WG-KV on top of Llama-3.1-8B \cite{llama3} and Qwen3-4B-2507 \cite{qwen3}. We freeze the backbone model and train only the lightweight Write-Gate MLP. Training is performed on a subset of FineWeb-Edu \cite{fineweb} with the objective of minimizing  $\mathcal{L}_{\text{total}}$. Detailed training configurations are provided in Appendix~\ref{app:training}.
 
 \paragraph{Evaluation scope.} We analyze the results on Llama-3.1-8B in this section. To demonstrate the generalizability of WG-KV across different model architectures, we provide additional evaluation results on Qwen3-4B-2507 in Appendix~\ref{app:qwen}.
+
+\myFloat{benchmark}{b}{1}
 
 \subsection{Sparsity-accuracy tradeoff}
 \label{sec:tradeoff}
@@ -24,9 +24,9 @@ In this section, we evaluate WG-KV across (1) the sparsity-accuracy tradeoff and
 \subsection{System efficiency}
 \label{sec:system_performance}
 
-\myFloat{perf}{b}{1}
-
 \paragraph{Setup.} Having established WG-KV's ability to maintain near-lossless accuracy at extreme sparsity, we validate its practical system efficiency under realistic workloads. We measure the end-to-end latency and memory usage using input sequences sampled from the PG-19 \cite{pg19} long-document dataset. We evaluate the model equipped with WG-KV at $\lambda = 0.16$, which achieves approximately 80\% sparsity (i.e., admitting 20\% KVs), and benchmark it against the standard full-attention model (see Appendix~\ref{app:system} for detailed experimental setup). \cref{fig:perf} shows the results.
+
+\myFloat{perf}{t}{1}
 
 \paragraph{Results.} Our efficient hardware-aware implementation (\cref{sec:implementation}) effectively translates theoretical sparsity into practical system gains. In the \textit{prefill} phase, WG-KV achieves a \textbf{2.56--3.85x} speedup across varying sequence lengths, primarily attributed to the vertical-slash sparse attention mechanism, which bypasses the massive computational cost of dense full attention. In the \textit{decode} phase, it achieves a \textbf{1.61--2.63x} speedup as the reduced KV cache size alleviates memory transfer overhead and consequently lowers attention latency. This compact KV cache also translates to a \textbf{36--60\%} reduction in overall memory usage.
 

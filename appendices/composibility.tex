@@ -9,11 +9,17 @@ We investigate the interplay between WG-KV and Quest \cite{quest}, a representat
 
 Notably, these compound efficiency gains do not come at the expense of model capability. As shown in \cref{fig:quest}d, integrating WG-KV achieves nearly identical HELMET accuracy to standalone Quest, indicating that performing selection on a cache already filtered by WG-KV preserves representation fidelity. \cref{fig:integration_new} further supports these findings by showing that this robustness is consistently maintained across varying selection budgets, highlighting the composable nature of pre-write Admission and read-time Selection.
 
+\myFloat{quest}{t}{1}
+
+\myFloat{integration_new}{t}{1}
+
 \subsection{Synergy with KV Eviction} 
 \label{subsec:evict_synergy}
 
 \cref{fig:evict} conceptually illustrates the synergy between KV Admission and Eviction. Without Admission, rapid KV accumulation leads to steep cache growth, causing the system to frequently hit the eviction threshold and trigger aggressive evictions (\cref{fig:evict}a). By pre-filtering redundant tokens, Admission flattens the growth, delaying the onset of eviction and reducing its frequency (\cref{fig:evict}b). The smaller shaded area under this flattened curve also translates to a lower cumulative attention cost over the generation process.
 
 \myFloat{evict}{t}{0.6}
+
+\myFloat{snapkv_short}{t}{0.75}
 
 We empirically validate this synergy by coupling WG-KV with SnapKV \cite{snapkv}, a representative KV Eviction method, in reasoning-intensive scenarios where long thinking traces rapidly consume KV cache memory. We evaluate this on the AIME25 benchmark \cite{aime25} using the reasoning variant of Qwen3-4B-2507 under strict memory limits. As illustrated in \cref{fig:snapkv_short}, relying solely on SnapKV (Eviction) leads to catastrophic degradation (26.7\% accuracy); this occurs because the ``write-then-throw'' inefficiency allows noise to flood the cache, triggering frequent and premature evictions that inadvertently discard critical context. Conversely, relying solely on WG-KV (Admission) to satisfy strict memory limits forces the policy to be overly aggressive, causing the model to reject potentially useful information and ``starve'' itself. However, combining these primitives yields a superior tradeoff. WG-KV acts as a gatekeeper that filters noise at the source, effectively reducing the frequency of eviction triggers and allowing the eviction policy to focus on pruning \textit{obsolete} history. This synergy stabilizes the reasoning process and restores accuracy to 80.0\%, matching the performance of the unbounded KV baseline while strictly adhering to memory limits. Detailed experimental setup and analysis are provided in Appendix~\ref{app:evict}.

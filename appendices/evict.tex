@@ -1,8 +1,6 @@
 \section{Details of Eviction Synergy for Long-Chain Reasoning}
 \label{app:evict}
 
-\myFloat{snapkv_short}{t}{0.75}
-
 This section details the experimental setup and further analysis of the Admission-Eviction synergy introduced in Appendix~\ref{subsec:evict_synergy}, particularly in reasoning-intensive scenarios where intermediate ``thinking tokens'' cause rapid cache expansion. While WG-KV effectively filters redundant tokens at the source, real-world hardware imposes strict limits on memory capacity. This constraint is particularly pronounced in modern high-throughput serving systems \cite{pagedattn,sglang}, where multiple concurrent requests compete for a shared memory pool. To sustain inference over prolonged generation phases---such as the extended reasoning trajectories seen in complex mathematical problem-solving---the system must enforce a hard memory budget by retrospectively pruning obsolete history. Here, we demonstrate how coupling pre-write Admission with post-write Eviction effectively reserves this limited capacity exclusively for critical context, yielding a superior memory-accuracy tradeoff compared to utilizing either primitive in isolation.
 
 \subsection{Eviction policy implementation}

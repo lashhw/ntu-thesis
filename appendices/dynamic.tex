@@ -6,6 +6,8 @@ To demonstrate that WG-KV learns an input-dependent admission policy rather than
 \subsection{Qualitative analysis}
 \label{app:qualitative}
 
+\myFloat{gate}{b}{1}
+
 To show that WG-KV adapts its memory allocation based on the input context, \cref{fig:gate} visualizes the distribution of KV cache sizes across all attention heads using Llama-3.1-8B with $\lambda=0.08$. We compare two distinct long-context tasks: \textit{(a) Code Summarization}, utilizing a Python sample from The Stack \cite{thestack}, and \textit{(b) HTML to TSV}, employing a structured data extraction sample from LongProc \cite{longproc}.
 
 \paragraph{Observations.} The heatmaps reveal distinct retention characteristics tailored to the input task:
@@ -26,6 +28,6 @@ To further justify that admission decisions are dynamically driven by the input 
     \item \textbf{Random Policy:} Randomly admitting tokens for $S_1$ while matching the exact retention ratio of $S_2$.
 \end{enumerate}
 
-If WG-KV merely degenerated into learning input-agnostic head specialization, the \textit{Replay Policy} should yield an MSE close to \textit{Own Policy} and outperform \textit{Random Policy}. However, as shown in \cref{tab:replay}, the \textit{Replay Policy} performs almost identically to the \textit{Random Policy} and is significantly worse than \textit{Own Policy}. This stark contrast quantitatively confirms that WG-KV's admission decisions are strictly input-dependent and dynamically tailored to the context of the given sequence.
-
 \myFloat{replay}{t}{0.9}
+
+If WG-KV merely degenerated into learning input-agnostic head specialization, the \textit{Replay Policy} should yield an MSE close to \textit{Own Policy} and outperform \textit{Random Policy}. However, as shown in \cref{tab:replay}, the \textit{Replay Policy} performs almost identically to the \textit{Random Policy} and is significantly worse than \textit{Own Policy}. This stark contrast quantitatively confirms that WG-KV's admission decisions are strictly input-dependent and dynamically tailored to the context of the given sequence.

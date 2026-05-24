@@ -1,6 +1,8 @@
 \section{Ablation Study on Local Cache}
 \label{app:local}
 
+\myFloat{threshold_cmp}{b}{0.8}
+
 To validate the necessity of local cache within WG-KV, we conducted an ablation study by removing the local cache. Specifically, we retrained the model using the same objective described in \cref{subsec:objective}, but constrained the local window size $W_{\text{local}}$ to 1. This configuration forces the model to rely exclusively on the learnable gate to decide whether to retain any token \textit{immediately upon generation}, effectively eliminating the grace period for recent tokens.
 
 \cref{fig:threshold_cmp} compares the full WG-KV system against the variant without local cache (``WG-KV w/o Local Cache''). We plot the average distillation loss $\mathcal{L}_{\text{distill}}$ on a held-out validation set of 750 FineWeb-Edu samples against the normalized KV cache size.
