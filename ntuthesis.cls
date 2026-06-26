@@ -333,6 +333,13 @@
     default = {Name of supervisor},
     name    = advisor@en,
   },
+  coadvisor = {
+    default = {},
+  },
+  coadvisor* = {
+    default = {},
+    name    = coadvisor@en,
+  },
   DOI = {
     default = {DOI Number},
   },
@@ -754,6 +761,11 @@
         \vfill
         指導教授: \ntu@advisor~博士\par
         Advisor: \ntu@advisor@en,~Ph.D.\par  % 英文姓名無須逗號，但職銜前需要逗號
+        \ifx\ntu@coadvisor\@empty\else
+          \vspace{0.5\baselineskip}
+          共同指導教授: \ntu@coadvisor~博士\par
+          Co-Advisor: \ntu@coadvisor@en,~Ph.D.\par
+        \fi
         \vfill
         中華民國~\ntu@format@date{\ntu@date@zh@digit@short}{\ntu@date}\par
         \ntu@format@date{\ntu@date@en@short}{\ntu@date}
