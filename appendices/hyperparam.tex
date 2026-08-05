@@ -1,6 +1,18 @@
 \section{Hyperparameter Analysis}
 \label{app:hyperparam}
 
-In this section, we provide a detailed analysis of the impact of the training-time hyperparameter $\lambda$ and the inference-time binarization threshold $\tau$. \cref{fig:threshold} plots the average distillation loss $\mathcal{L}_{\text{distill}}$ computed on a held-out validation set of 750 FineWeb-Edu samples against the normalized KV cache size. By sweeping $\lambda$ and $\tau$, we trace the Pareto frontier of the model's sparsity-loss tradeoff. Increasing $\lambda$ effectively drives the model towards higher sparsity (admitting less KVs), albeit with an increase in $\mathcal{L}_{\text{distill}}$. Empirically, we observe that fixing $\tau \approx 0.1$ consistently yields near-optimal operating points along this frontier across various $\lambda$ settings. Based on this observation, we adopt $\tau=0.1$ for all of our experiments.
+\subsection{Impact of \texorpdfstring{$\lambda$}{λ} and \texorpdfstring{$\tau$}{τ}}
 
-\myFloat{threshold}{h}{0.8}
+In this section, we provide a detailed analysis of the impact of the training-time hyperparameter $\lambda$ and the inference-time binarization threshold $\tau$. \cref{fig:threshold} plots the average distillation loss $\mathcal{L}_{\text{distill}}$ computed on a held-out validation set of 750 FineWeb-Edu samples against the normalized KV cache size. By sweeping $\lambda$ and $\tau$, we trace the Pareto frontier of the model's sparsity-loss tradeoff. Increasing $\lambda$ effectively drives the model towards higher sparsity (admitting less KVs), albeit with an increase in $\mathcal{L}_{\text{distill}}$. Empirically, we observe that fixing $\tau \approx 0.1$ consistently yields near-optimal operating points along this frontier across various $\lambda$ settings. We therefore adopt $\tau=0.1$ for all of our experiments.
+
+\subsection{Continuous versus discrete gating}
+
+Since admission is inherently a discrete decision, binarizing a continuously relaxed gate (\cref{subsec:gate,subsec:objective}) raises the concern of a train-inference mismatch: a token with an intermediate gating score remains partially visible during training, yet is either fully retained or entirely discarded at inference. To quantify this gap, we retrain the Write-Gate MLP with hard-concrete gates \cite{hardconcrete}, reinterpreting the MLP output as an unnormalized log-probability $\log \alpha$ (temperature 0.667 with stretch interval from -0.1 to 1.1) and replacing $\mathcal{L}_{\text{sparsity}}$ with the closed-form expected $L_0$ norm. Owing to the stretch-and-clip construction, the resulting gate is exactly binary for the vast majority of tokens and is therefore nearly invariant to $\tau$ by design, serving as a mismatch-free reference point.
+
+\myFloat{threshold}{t}{0.78}
+
+\myFloat{threshold_hc}{t}{0.78}
+
+\cref{fig:threshold_hc} compares the two variants. Across the admission budgets adopted in this paper, the two frontiers are nearly identical, indicating that the binarization term in $\mathcal{L}_{\text{sparsity}}$ suffices to keep the learned policy close to a discrete one and that the relaxation gap is small in practice. The two diverge only under aggressive budgets, where the discrete gate traces a modestly lower frontier.
+
+Since the two perform comparably at the budgets we target, we adopt the continuous gate, which avoids the additional gradient variance and temperature sensitivity of stochastic sampling \cite{concrete,gumbel}.

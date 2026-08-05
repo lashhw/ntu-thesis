@@ -34,7 +34,9 @@
 
 \declareFig{threshold}{Impact of $\lambda$ and $\tau$ on sparsity-loss tradeoff}{}
 
-\declareFig{threshold_cmp}{Impact of local cache on sparsity-loss tradeoff}{Removing local cache leads to a sharp surge in distillation loss.}
+\declareFig{threshold_hc}{Comparison of continuous and discrete gating on the sparsity-loss tradeoff}{}
+
+\declareFig{threshold_cmp}{Impact of local cache on the sparsity-loss tradeoff}{Removing local cache leads to a sharp surge in distillation loss.}
 
 \declareWideFig{gate}{Visualization of input-dependent admission patterns}{The heatmaps show the normalized KV cache size across each head for Llama-3.1-8B with WG-KV. We compare the \textit{(a) Code Summarization} task, which exhibits a relatively uniform distribution, against the \textit{(b) HTML to TSV} task, which shows a sparser pattern. This contrast demonstrates that WG-KV learns an input-dependent policy based on the semantic structure of the task.}
 
