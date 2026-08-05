@@ -8,7 +8,7 @@
 
 ### Q2. Training 與 inference 的計算不一致（inference 有 binarize），是否影響準確度？有量化數據嗎？
 
-有，這部分我們在 Appendix J.2 新增了量化實驗。我們以 hard-concrete gate（Louizos et al., 2018）重新訓練作為對照組：該 gate 因 stretch-and-clip 的構造，對絕大多數 token 的輸出恰好為 0 或 1、且幾乎不受 $\tau$ 影響，可視為「無 mismatch」的參考點。Figure 19 比較兩者的 sparsity–loss Pareto frontier，在本文採用的 admission budget 範圍內兩條曲線幾乎重合，僅在極端稀疏時 discrete gate 略優，代表 $\mathcal{L}_{\text{sparsity}}$ 中的 binarization 項已足以把學到的 policy 推近離散決策，relaxation gap 在實務上很小。
+有，這部分我們在 Appendix J.2 新增了量化實驗。我們以 hard-concrete gate（Louizos et al., 2018）重新訓練作為對照組：該 gate 因 stretch-and-clip 的構造，對絕大多數 token 的輸出恰好為 0 或 1、且幾乎不受 $\tau$ 影響，可視為「無 mismatch」的參考點。Figure J.2 比較兩者的 sparsity–loss Pareto frontier，在本文採用的 admission budget 範圍內兩條曲線幾乎重合，僅在極端稀疏時 discrete gate 略優，代表 $\mathcal{L}_{\text{sparsity}}$ 中的 binarization 項已足以把學到的 policy 推近離散決策，relaxation gap 在實務上很小。
 
 ---
 
@@ -32,7 +32,7 @@
 
 ### Q5. 你的方法大約有多少比例的 token 會進到 global cache？
 
-這是由 $\lambda$ 這個超參數控制的一條 tradeoff 曲線，而非固定值：$\lambda$ 越大 sparsity 越高，代價是過度稀疏會開始損及準確度。論文的主要實驗設定在 $\lambda=0.16$（Llama-3.1-8B）與 $\lambda=0.32$（Qwen3-4B-2507），約對應 80% sparsity，也就是只有約 20% 的 KV 被寫入 global cache。從 Figure 7 與 Figure 10 可以看到，在這個設定下絕大多數任務仍維持近乎無損的準確度；在 MS MARCO、InfiniteBench Sum、Multi-LexSum 等資訊密集的任務上，即使壓到只 admit 10% KV 仍近乎無損。
+這是由 $\lambda$ 這個超參數控制的一條 tradeoff 曲線，而非固定值：$\lambda$ 越大 sparsity 越高，代價是過度稀疏會開始損及準確度。論文的主要實驗設定在 $\lambda=0.16$（Llama-3.1-8B）與 $\lambda=0.32$（Qwen3-4B-2507），約對應 80% sparsity，也就是只有約 20% 的 KV 被寫入 global cache。從 Figure 5.1 與 Figure G.1 可以看到，在這個設定下絕大多數任務仍維持近乎無損的準確度；在 MS MARCO、InfiniteBench Sum、Multi-LexSum 等資訊密集的任務上，即使壓到只 admit 10% KV 仍近乎無損。
 
 ---
 
@@ -64,4 +64,4 @@
 
 ### Q4. 什麼樣的 model 受惠最大？大一點還是小一點？層數多還是少？
 
-決定收益的主要不是參數量，而是「每個 token 的 KV 佔多少成本」以及「context 有多長」。context 長度是最強的因子：Figure 2 顯示 attention 佔 prefill 時間的比例從 100K 的 79% 上升到 400K 的 94%，越長收益越大。架構上，KV footprint 越大的模型受惠越多——KV head 數多（MHA 而非激進的 GQA）、head_dim 大、層數多、且沒有 cross-layer sharing；反之，已經用 MLA、MQA、sliding-window 混合或線性注意力壓過一輪的模型，剩餘空間就相對有限。模型大小方面，目前兩個資料點顯示小模型在記憶體上更有感（Qwen3-4B 省 53–69%，Llama-3.1-8B 省 36–60%），因為 KV cache 佔總記憶體的比例更高；而 Write-Gate MLP 的相對開銷固定在約 0.4%，模型越大越划算，加上大模型的 attention 通常更稀疏，我推測趨勢會是持平或更好，但這需要實驗證實——目前僅驗證 4B–8B 的 dense model，更大規模與 MoE 已列於 Limitations。
+決定收益的主要不是參數量，而是「每個 token 的 KV 佔多少成本」以及「context 有多長」。context 長度是最強的因子：Figure 2.1 顯示 attention 佔 prefill 時間的比例從 100K 的 79% 上升到 400K 的 94%，越長收益越大。架構上，KV footprint 越大的模型受惠越多——KV head 數多（MHA 而非激進的 GQA）、head_dim 大、層數多、且沒有 cross-layer sharing；反之，已經用 MLA、MQA、sliding-window 混合或線性注意力壓過一輪的模型，剩餘空間就相對有限。模型大小方面，目前兩個資料點顯示小模型在記憶體上更有感（Qwen3-4B 省 53–69%，Llama-3.1-8B 省 36–60%），因為 KV cache 佔總記憶體的比例更高；而 Write-Gate MLP 的相對開銷固定在約 0.4%，模型越大越划算，加上大模型的 attention 通常更稀疏，我推測趨勢會是持平或更好，但這需要實驗證實——目前僅驗證 4B–8B 的 dense model，更大規模與 MoE 已列於 Limitations。
