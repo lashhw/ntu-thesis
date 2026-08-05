@@ -4,7 +4,7 @@
 
 ### Q1. 會不會有 token 當下看似無用、但很久之後才變得重要？
 
-這是 Admission 相對於 Eviction 最根本的取捨：Eviction 是根據已觀察到的 attention 統計事後判斷（有後見之明），Admission 則必須在寫入前預測未來效用。我們用三個機制降低誤判風險。其一，訓練訊號本身就針對這件事——$L_{\text{distill}}$ 是在 4K–32K 的長序列上比對最後一層 hidden state，若某個 token 的效用要到數千步之後才浮現，捨棄它就會直接反映在 loss 上，因此「延遲效用」是被訓練目標涵蓋的。其二，local cache 提供緩衝期，避免對剛生成、尚未展現長程效用的 token 做過早判決。其三，admission 是 per-head 的決策，同一個 token 在某些 head 被捨棄時通常仍被其他 head 保留，形成天然冗餘。實證上，HELMET 的 RAG 與 long-document QA 正是對延遲效用最敏感的設定（問題在序列最末端、答案散落在極早期 context），而 WG-KV 在僅 admit 20%、部分任務甚至 10% 的預算下仍近乎無損，說明預測誤差在實務上是可控的。
+這是 Admission 相對於 Eviction 最根本的取捨：Eviction 是根據已觀察到的 attention 統計事後判斷（有後見之明），Admission 則必須在寫入前預測未來效用。我們用三個機制降低誤判風險。其一，訓練訊號本身就針對這件事——$\mathcal{L}_{\text{distill}}$ 是在 4K–32K 的長序列上比對最後一層 hidden state，若某個 token 的效用要到數千步之後才浮現，捨棄它就會直接反映在 loss 上，因此「延遲效用」是被訓練目標涵蓋的。其二，local cache 提供緩衝期，避免對剛生成、尚未展現長程效用的 token 做過早判決。其三，admission 是 per-head 的決策，同一個 token 在某些 head 被捨棄時通常仍被其他 head 保留，形成天然冗餘。實證上，HELMET 的 RAG 與 long-document QA 正是對延遲效用最敏感的設定（問題在序列最末端、答案散落在極早期 context），而 WG-KV 在僅 admit 20%、部分任務甚至 10% 的預算下仍近乎無損，說明預測誤差在實務上是可控的。
 
 ### Q2. Training 與 inference 的計算不一致（inference 有 binarize），是否影響準確度？有量化數據嗎？
 
@@ -20,7 +20,7 @@
 
 ### Q2. 為什麼 sparsity loss 要拆成兩項？物理意義是什麼？二次項為何不直接用 $g^2$？
 
-兩項各司其職：$g$ 控制「admit 多少」，是 admission rate 的可微代理（L0 的 L1 鬆弛）；$g (1 - g)$ 控制「決策有多果斷」，它在 $g=0.5$ 最大、在 0 與 1 為零，作用是把 gate 推離模稜兩可的中間值。另一個等價的看法是兩項相加恰好等於 $2g - g^2 = 1-(1-g)^2$ ——這正是我們真正想要的 $1(g>0)$（L0 norm）的平滑代理：在 $g=0$ 附近梯度最大、接近 1 時飽和，形狀上模擬了 step function。至於為何不直接用 $g^2$：$g^2$ 是凸函數，在固定總預算 $\Sigma g$ 的條件下，凸的懲罰反而偏好讓所有 gate 平均落在中間值（Jensen 不等式），容易訓練出 0.2、0.3 這類難以二值化的數；而 $2g-g^2$ 是凹函數，同樣預算下會把 g 推向 0 或 1 兩端。此外 $g^2$ 在 $g\rightarrow 0$ 時梯度趨近於零，對已經很小的 gate 幾乎沒有推力，不易真正歸零，進而增加 train-inference mismatch。
+兩項各司其職：$g$ 控制「admit 多少」，是 admission rate 的可微代理（L0 的 L1 鬆弛）；$g(1-g)$ 控制「決策有多果斷」，它在 $g=0.5$ 最大、在 0 與 1 為零，作用是把 gate 推離模稜兩可的中間值。另一個等價的看法是兩項相加恰好等於 $2g - g^2 = 1-(1-g)^2$ ——這正是我們真正想要的 $1(g>0)$（L0 norm）的平滑代理：在 $g=0$ 附近梯度最大、接近 1 時飽和，形狀上模擬了 step function。至於為何不直接用 $g^2$：$g^2$ 是凸函數，在固定總預算 $\Sigma g$ 的條件下，凸的懲罰反而偏好讓所有 gate 平均落在中間值（Jensen 不等式），容易訓練出 0.2、0.3 這類難以二值化的數；而 $2g-g^2$ 是凹函數，同樣預算下會把 g 推向 0 或 1 兩端。此外 $g^2$ 在 $g\rightarrow 0$ 時梯度趨近於零，對已經很小的 gate 幾乎沒有推力，不易真正歸零，進而增加 train-inference mismatch。
 
 ### Q3. 這個方法的泛化性好嗎？需要為每個任務訓練嗎？
 
@@ -40,7 +40,7 @@
 
 ### Q1. 這個方法的好處是不用整個模型重訓，那別人要移植需要改哪些？effort 多大？
 
-需要三件事：在 attention block 中插入 Write-Gate MLP；凍結 backbone、以 $L_\text{total}$ 訓練這個 MLP；推論時替換成我們的 attention kernel。額外參數僅約佔模型總量的 0.4%。成本方面（Appendix C），7,500 筆 4K–32K 樣本、約 63M tokens，單張 H100 約 6 小時即可完成一次訓練；由於目標是對 frozen backbone 做 self-distillation，過程中不需要任何標註資料。我已在公開 repo 補上移植說明：<https://github.com/EMCLab-Sinica/WG-KV/blob/main/PORTING.md>。
+需要三件事：在 attention block 中插入 Write-Gate MLP；凍結 backbone、以 $\mathcal{L}_\text{total}$ 訓練這個 MLP；推論時替換成我們的 attention kernel。額外參數僅約佔模型總量的 0.4%。成本方面（Appendix C），7,500 筆 4K–32K 樣本、約 63M tokens，單張 H100 約 6 小時即可完成一次訓練；由於目標是對 frozen backbone 做 self-distillation，過程中不需要任何標註資料。我已在公開 repo 補上移植說明：<https://github.com/EMCLab-Sinica/WG-KV/blob/main/PORTING.md>。
 
 ### Q2. 別的模型要用你的方法，一定要重新訓練 MLP 嗎？
 
